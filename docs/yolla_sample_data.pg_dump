@@ -1,0 +1,1774 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
+-- Dumped by pg_dump version 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: article; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.article (
+    id bigint NOT NULL,
+    mobile boolean NOT NULL,
+    status smallint NOT NULL,
+    page_home boolean NOT NULL,
+    en_content text NOT NULL,
+    zh_hans_content text NOT NULL,
+    es_content text NOT NULL,
+    ar_content text NOT NULL,
+    fr_content text NOT NULL,
+    ru_content text NOT NULL,
+    category_id bigint,
+    topic_id bigint,
+    CONSTRAINT article_status_check CHECK ((status >= 0))
+);
+
+
+ALTER TABLE public.article OWNER TO postgres;
+
+--
+-- Name: article_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.article_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.article_id_seq OWNER TO postgres;
+
+--
+-- Name: article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
+
+
+--
+-- Name: article_media; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.article_media (
+    id bigint NOT NULL,
+    image character varying(100) NOT NULL,
+    md5 character varying(32) NOT NULL,
+    size integer NOT NULL,
+    CONSTRAINT article_media_size_check CHECK ((size >= 0))
+);
+
+
+ALTER TABLE public.article_media OWNER TO postgres;
+
+--
+-- Name: article_media_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.article_media_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.article_media_id_seq OWNER TO postgres;
+
+--
+-- Name: article_media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.article_media_id_seq OWNED BY public.article_media.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id bigint NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: category; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.category (
+    id bigint NOT NULL,
+    order_by_this smallint NOT NULL,
+    slug character varying(50) NOT NULL,
+    show_in_top_nav boolean NOT NULL,
+    en_name character varying(200) NOT NULL,
+    zh_hans_name character varying(200) NOT NULL,
+    es_name character varying(200) NOT NULL,
+    ar_name character varying(200) NOT NULL,
+    fr_name character varying(200) NOT NULL,
+    ru_name character varying(200) NOT NULL,
+    apex_id bigint,
+    CONSTRAINT category_order_by_this_check CHECK ((order_by_this >= 0))
+);
+
+
+ALTER TABLE public.category OWNER TO postgres;
+
+--
+-- Name: category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.category_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.category_id_seq OWNER TO postgres;
+
+--
+-- Name: category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.category_id_seq OWNED BY public.category.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id bigint NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_migrations (
+    id bigint NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO postgres;
+
+--
+-- Name: jumbotron; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jumbotron (
+    id bigint NOT NULL,
+    page_home boolean NOT NULL,
+    en_content character varying(200) NOT NULL,
+    zh_hans_content character varying(200) NOT NULL,
+    es_content character varying(200) NOT NULL,
+    ar_content character varying(200) NOT NULL,
+    fr_content character varying(200) NOT NULL,
+    ru_content character varying(200) NOT NULL,
+    category_id bigint,
+    topic_id bigint
+);
+
+
+ALTER TABLE public.jumbotron OWNER TO postgres;
+
+--
+-- Name: jumbotron_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jumbotron_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jumbotron_id_seq OWNER TO postgres;
+
+--
+-- Name: jumbotron_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jumbotron_id_seq OWNED BY public.jumbotron.id;
+
+
+--
+-- Name: opinion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.opinion (
+    id bigint NOT NULL,
+    recorded timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL,
+    status smallint NOT NULL,
+    reason_for_rejection text NOT NULL,
+    apex_language character varying(20) NOT NULL,
+    en_text text NOT NULL,
+    zh_hans_text text NOT NULL,
+    es_text text NOT NULL,
+    ar_text text NOT NULL,
+    fr_text text NOT NULL,
+    ru_text text NOT NULL,
+    apex_id bigint,
+    publisher_id bigint NOT NULL,
+    topic_id bigint NOT NULL,
+    CONSTRAINT opinion_status_check CHECK ((status >= 0))
+);
+
+
+ALTER TABLE public.opinion OWNER TO postgres;
+
+--
+-- Name: opinion_attachment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.opinion_attachment (
+    id bigint NOT NULL,
+    document character varying(100) NOT NULL,
+    original_label character varying(200) NOT NULL,
+    md5 character varying(32) NOT NULL,
+    size integer NOT NULL,
+    deleted boolean NOT NULL,
+    opinion_id bigint NOT NULL,
+    CONSTRAINT opinion_attachment_size_check CHECK ((size >= 0))
+);
+
+
+ALTER TABLE public.opinion_attachment OWNER TO postgres;
+
+--
+-- Name: opinion_attachment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.opinion_attachment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.opinion_attachment_id_seq OWNER TO postgres;
+
+--
+-- Name: opinion_attachment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.opinion_attachment_id_seq OWNED BY public.opinion_attachment.id;
+
+
+--
+-- Name: opinion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.opinion_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.opinion_id_seq OWNER TO postgres;
+
+--
+-- Name: opinion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.opinion_id_seq OWNED BY public.opinion.id;
+
+
+--
+-- Name: participant; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.participant (
+    id bigint NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    first_name character varying(150) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    username character varying(50) NOT NULL,
+    name character varying(50) NOT NULL,
+    email character varying(254) NOT NULL,
+    time_zone character varying(50) NOT NULL,
+    l1 character varying(20) NOT NULL,
+    l2 character varying(20) NOT NULL,
+    about text NOT NULL
+);
+
+
+ALTER TABLE public.participant OWNER TO postgres;
+
+--
+-- Name: participant_groups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.participant_groups (
+    id bigint NOT NULL,
+    participant_id bigint NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.participant_groups OWNER TO postgres;
+
+--
+-- Name: participant_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.participant_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.participant_groups_id_seq OWNER TO postgres;
+
+--
+-- Name: participant_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.participant_groups_id_seq OWNED BY public.participant_groups.id;
+
+
+--
+-- Name: participant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.participant_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.participant_id_seq OWNER TO postgres;
+
+--
+-- Name: participant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.participant_id_seq OWNED BY public.participant.id;
+
+
+--
+-- Name: participant_user_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.participant_user_permissions (
+    id bigint NOT NULL,
+    participant_id bigint NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.participant_user_permissions OWNER TO postgres;
+
+--
+-- Name: participant_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.participant_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.participant_user_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: participant_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.participant_user_permissions_id_seq OWNED BY public.participant_user_permissions.id;
+
+
+--
+-- Name: topic; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.topic (
+    id bigint NOT NULL,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL,
+    slug character varying(50) NOT NULL,
+    published boolean NOT NULL,
+    en_name character varying(200) NOT NULL,
+    zh_hans_name character varying(200) NOT NULL,
+    es_name character varying(200) NOT NULL,
+    ar_name character varying(200) NOT NULL,
+    fr_name character varying(200) NOT NULL,
+    ru_name character varying(200) NOT NULL,
+    en_description character varying(500) NOT NULL,
+    zh_hans_description character varying(500) NOT NULL,
+    es_description character varying(500) NOT NULL,
+    ar_description character varying(500) NOT NULL,
+    fr_description character varying(500) NOT NULL,
+    ru_description character varying(500) NOT NULL,
+    category_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.topic OWNER TO postgres;
+
+--
+-- Name: topic_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.topic_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.topic_id_seq OWNER TO postgres;
+
+--
+-- Name: topic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.topic_id_seq OWNED BY public.topic.id;
+
+
+--
+-- Name: article id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.article_id_seq'::regclass);
+
+
+--
+-- Name: article_media id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article_media ALTER COLUMN id SET DEFAULT nextval('public.article_media_id_seq'::regclass);
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: category id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category ALTER COLUMN id SET DEFAULT nextval('public.category_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: jumbotron id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jumbotron ALTER COLUMN id SET DEFAULT nextval('public.jumbotron_id_seq'::regclass);
+
+
+--
+-- Name: opinion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion ALTER COLUMN id SET DEFAULT nextval('public.opinion_id_seq'::regclass);
+
+
+--
+-- Name: opinion_attachment id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion_attachment ALTER COLUMN id SET DEFAULT nextval('public.opinion_attachment_id_seq'::regclass);
+
+
+--
+-- Name: participant id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant ALTER COLUMN id SET DEFAULT nextval('public.participant_id_seq'::regclass);
+
+
+--
+-- Name: participant_groups id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_groups ALTER COLUMN id SET DEFAULT nextval('public.participant_groups_id_seq'::regclass);
+
+
+--
+-- Name: participant_user_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.participant_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: topic id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.topic ALTER COLUMN id SET DEFAULT nextval('public.topic_id_seq'::regclass);
+
+
+--
+-- Data for Name: article; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.article (id, mobile, status, page_home, en_content, zh_hans_content, es_content, ar_content, fr_content, ru_content, category_id, topic_id) FROM stdin;
+1	f	1	f	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>In botany, a fruit is the seed-bearing structure in flowering plants that is formed from the ovary after flowering.</p>\r\n\r\n<p>Fruits are the means by which flowering plants (also known as angiosperms) disseminate their seeds. Edible fruits in particular have long propagated using the movements of humans and animals in a symbiotic relationship that is the means for seed dispersal for the one group and nutrition for the other; in fact, humans and many animals have become dependent on fruits as a source of food. Consequently, fruits account for a substantial fraction of the world&#39;s agricultural output, and some (such as the apple and the pomegranate) have acquired extensive cultural and symbolic meanings.</p>\r\n\r\n<p>In common language usage, &quot;fruit&quot; normally means the seed-associated fleshy structures (or produce) of plants that typically are sweet or sour and edible in the raw state, such as apples, bananas, grapes, lemons, oranges, and strawberries. In botanical usage, the term &quot;fruit&quot; also includes many structures that are not commonly called &quot;fruits&quot; in everyday language, such as nuts, bean pods, corn kernels, tomatoes, and wheat grains.</p>	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>水果列表乃是以生物学上的种 为基本单位，列举人类经常生食或加工成果干、果酱、酿酒等方式利用之植物果实，定义上兼纳真果与假果而涵盖具有柔软果肉之浆果、柑果、核果、梨果、瓠果等各种类型；且除了全球性的常见水果外，亦包含各大洲地域性的水果在内。</p>\r\n\r\n<p>下列情形不为本表所收列：</p>\r\n\r\n<ol>\r\n\t<li>该植物之果实有剧毒而完全不可食用者，如海檬果、夹竹桃、毒番石榴、颠茄。</li>\r\n\t<li>该植物之果实虽可食用但长期下来会损害身体健康者，如含有致癌物之槟榔。</li>\r\n\t<li>该植物之果实虽可食用但相对而言食用价值较小者，如加拿利海枣、山桃、茄苳果实、菲岛福木果实。</li>\r\n\t<li>该植物之果实为干果及主要供熟食者，如坚果类、谷物类、大部分的豆类，及瓜果类蔬菜。</li>\r\n\t<li>该植物是以果实外之部位供人类生食者，如甘蔗、水果萝卜。</li>\r\n</ol>\r\n\r\n<p>以下依水果学名首字母排序，罗列其学名、中文名、栽培品种或变种名、参考图片及中英文名称对照等资讯。</p>	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>Se denomina fruta a aquellos frutos comestibles obtenidos de plantas cultivadas o silvestres que, por su sabor generalmente dulce-acidulado, su aroma intenso y agradable y sus propiedades nutritivas, suelen consumirse mayormente en su estado fresco, como jugo o como postre (y en menor medida, en otras preparaciones), una vez alcanzada la madurez organol&eacute;ptica, o luego de ser sometidos a cocci&oacute;n.</p>\r\n\r\n<p>La definici&oacute;n del diccionario de la Real Academia Espa&ntilde;ola no es espec&iacute;fica: &quot;fruto comestible de ciertas plantas cultivadas&nbsp; ; p. ej. la pera, la guinda, la fresa, etc.&quot;2​ Sin embargo, por los ejemplos dados, se evidencia que el t&eacute;rmino fruta se refiere a frutos para uso prioritario (aunque no excluyente) como postre, producidos en su mayor&iacute;a por plantas le&ntilde;osas (es decir, &aacute;rboles frutales; por ejemplo, manzano, peral, melocotonero o durazno, ciruelo, cerezo, albaricoquero o damasco, higuera, vid, naranjo, mandarino, limonero, mango, papaya, chirimoya, guayabo, etc.) o por plantas semile&ntilde;osas (arbustos frutales; por ejemplo, ar&aacute;ndano, zarzamora, frambuesa, etc.) y, en mucha menor medida, por plantas herb&aacute;ceas (por ejemplo, frutilla o fresa, banano o pl&aacute;tano).</p>\r\n\r\n<p>El consumo de frutas aporta pocas calor&iacute;as y un alto porcentaje de agua (entre 80 y 95 % de su peso fresco), por lo que facilita la hidrataci&oacute;n del organismo. Coadyuva al correcto funcionamiento del aparato digestivo por el aporte de fibra alimentaria. Salvo excepciones (por ejemplo, el coco y el aceite de palma obtenido del fruto de Elaeis guineensis), las frutas no aportan grasas saturadas. Algunas frutas son fuentes de &aacute;cidos grasos esenciales para el organismo, tales como los frutos secos y las paltas o aguacates. Las frutas son adem&aacute;s una importante fuente de energ&iacute;a para el organismo por su alto contenido en hidratos de carbono solubles de r&aacute;pida disponibilidad.</p>\r\n\r\n<p>Como alimento, las frutas realizan aportes a la dieta que son de suma importancia para la salud humana. En general, son ricas en vitaminas, sales minerales y antioxidantes. Algunas vitaminas y minerales, como la vitamina C y el potasio, dependen en buena medida de las frutas como fuentes de suministro. Existen frutas como la sand&iacute;a o el mel&oacute;n que contienen un alto &iacute;ndice de agua.</p>	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>الفواكه هي الثمار النباتية التي تحملها النباتات كغطاء لبذورها.</p>\r\n\r\n<p>تتميز عادة بأنها حلوة أو حامضة الطعم ومكتنزة بالمياه. ينصح بتناول الفاكهة على معدة فارغة لاحتوائها على سكاكر بسيطة، مما يؤدي إلى إبطاء عملية الهضم والامتصاص عند تناولها مباشرة بعد الطعام إذ تحتوي الفواكه على فيتامينات وعناصر مهمة مثل الكالسيوم الذي يساعد على تقوية العظام وعدم الإصابة بهشاشة العظام والعديد من الفوائد...إلخ حيث لا يستطيع أي إنسان الاستغناء عن النبات والفواكه سواء بطريقة مباشرة أو غير مباشرة.<br />\r\nأنواع مختلفة من الفاكهة</p>\r\n\r\n<p>كما أن الفواكه تحتوي على ألياف تسهل عمل الأمعاء والإخراج. كما توجد في الفواكه مواد تساعد على المحافظة على الشباب وتخفيف متاعب الكهولة. والفواكه تساعد على معادلة السموم وإبطال عملها الضار للجسم. وهى مفيدة جدًا للحصول على الفتامين كما نوصي عند عسر الهضم بأكل فاكهة البطيخ والتي لها فوائد عظيمة في مرض عسر الهضم، هذا والله أعلم.</p>	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>Le fruit, en botanique, est l&#39;organe v&eacute;g&eacute;tal contenant une ou plusieurs graines. Caract&eacute;ristique des Angiospermes, il succ&egrave;de &agrave; la fleur par transformation du pistil. La paroi de l&#39;ovaire forme le p&eacute;ricarpe du fruit et l&#39;ovule donne la graine1.</p>\r\n\r\n<p>Ce qui est appel&eacute; &laquo; fruit &raquo; dans le langage alimentaire courant peut &ecirc;tre biologiquement parlant un fruit ou un faux-fruit (pomme, ananas...). &Agrave; l&#39;inverse, un fruit biologique (ou un faux-fruit) peut-&ecirc;tre d&eacute;sign&eacute; couramment comme &laquo; l&eacute;gume &raquo; (avocat, tomate...), &laquo; &eacute;pice &raquo; (poivre, piment...) ou &laquo; c&eacute;r&eacute;ale &raquo; (bl&eacute;, riz...).</p>	<img src="[MEDIA_URL]fruit.jpg">\r\n\r\n<p>Фру́кт (лат. fructus &mdash; плод) &mdash; сочный съедобный плод растения. Фрукты являются важной составляющей пищи человека и многих животных.</p>\r\n\r\n<p>В древнерусском языке слова &laquo;фрукт&raquo; не существовало, оно появилось лишь в 1705 году, это заимствование через польск. fruct из лат. fructus; любые плоды назывались овощами или овоштами.</p>\r\n\r\n<p>&laquo;Фрукт&raquo; &mdash; не ботанический, а бытовой и хозяйственный термин. В хозяйстве съедобные растения и съедобные части растений делят на фрукты, овощи, орехи, зерновые культуры и т. д. В бытовом понимании ягода &mdash; тоже сочный плод. Фрукт отличается от ягоды в основном размером, в процессе еды его не берут двумя пальцами и не кладут целиком в рот.</p>\r\n\r\n<p>В некоторых языках понятие &laquo;фрукт&raquo; не выделяется из понятия &laquo;плод&raquo;, обозначающее орган покрытосеменных растений, содержащий семена, образовавшийся из завязи цветка, независимо от съедобности и сочности.</p>	5	\N
+2	f	1	f	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>Felidaeis a family of mammals in the order Carnivora, colloquially referred to as cats, and constitutes a clade. A member of this family is also called a felid. The term &quot;cat&quot; refers both to felids in general and specifically to the domestic cat (Felis catus).</p>\r\n\r\n<p>Felidae species exhibit the most diverse fur pattern of all terrestrial carnivores. Cats have retractile claws, slender muscular bodies and strong flexible forelimbs. Their teeth and facial muscles allow for a powerful bite. They are all obligate carnivores, and most are solitary predators ambushing or stalking their prey. Wild cats occur in Africa, Europe, Asia and the Americas. Some wild cat species are adapted to forest habitats, some to arid environments, and a few also to wetlands and mountainous terrain. Their activity patterns range from nocturnal and crepuscular to diurnal, depending on their preferred prey species.</p>\r\n\r\n<p>Reginald Innes Pocock divided the extant Felidae into three subfamilies: the Pantherinae, the Felinae and the Acinonychinae, differing from each other by the ossification of the hyoid apparatus and by the cutaneous sheaths which protect their claws. This concept has been revised following developments in molecular biology and techniques for analysis of morphological data. Today, the living Felidae are divided in two subfamilies: the Pantherinae and Felinae, with the Acinonychinae subsumed into the latter. Pantherinae includes five Panthera and two Neofelis species, while Felinae includes the other 34 species in ten genera.</p>\r\n\r\n<p>The first cats emerged during the Oligocene about 25 million years ago, with the appearance of Proailurus and Pseudaelurus. The latter species complex was ancestral to two main lines of felids: the cats in the extant subfamilies and a group of extinct cats of the subfamily Machairodontinae, which include the saber-toothed cats such as the Smilodon. The &quot;false sabre-toothed cats&quot;, the Barbourofelidae and Nimravidae, are not true cats, but are closely related. Together with the Felidae, Viverridae, hyaenas and mongooses, they constitute the Feliformia.</p>	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>貓科包括獅子、老虎和豹等動物，是食肉目的9個科中最具肉食性的哺乳動物。第一種的貓科動物出現於漸新世，人們更熟悉的家貓和人類在一万年前開始有關連。家貓的野生種親戚野貓，仍然生存在歐洲、非洲和亞洲東部等地，雖然棲地破壞限制了其居住的範圍。</p>\r\n\r\n<p>其他貓科動物中知名的成員有包括如獅子、老虎、豹和美洲豹等大貓，以及其他如美洲獅、獵豹、猞猁、獰貓和短尾貓等貓亚科动物。已滅絕的劍齒虎亞科為真的貓科動物，而其他如袋劍齒虎和獵貓等相似的動物則不是。</p>	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>Los f&eacute;lidos o com&uacute;nmente llamados felinos (Felidae) son una familia de mam&iacute;feros placentarios del orden Carnivora. Poseen un cuerpo esbelto, o&iacute;do agudo, hocico corto y excelente vista. Son los mam&iacute;feros cazadores m&aacute;s sigilosos. La mayor&iacute;a consume exclusivamente carne e ignora cualquier otra comida que no sea una presa viva. La capturan con sus afiladas garras y suelen matarla de un &uacute;nico y tenaz mordisco.</p>\r\n\r\n<p>A excepci&oacute;n de los guepardos, todos los f&eacute;lidos pueden retraer las u&ntilde;as de sus garras dentro de una vaina protectora mientras no las usan.</p>\r\n\r\n<p>Hay alrededor de cuarenta especies en esta familia; muchas de las cuales escasean en la actualidad, porque han sido objeto de caza por su piel, para aprovechar partes de su cuerpo, o porque su h&aacute;bitat est&aacute; siendo destruido, como pasa con el lince ib&eacute;rico (Lynx pardinus), el f&eacute;lido en mayor peligro de extinci&oacute;n.</p>\r\n\r\n<p>Excepto en Ant&aacute;rtida, Ocean&iacute;a y algunas islas, se los encuentra en todo el mundo.</p>	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>السِّنَّوْرِيَّات (بالإنجليزية: Felidae) أو الهِرِّيَّات أو القططيات فصيلةٌ من الحيوانات الثَّدْيِيَّة التي تضم كَثِيرًا من الأنواع مثل الأُسُود، و البُبُور، و النُّمُور، و الفُهُود، و القطط الأليفة والبرية، وأنواع عديدة أخرى.</p>	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>Les F&eacute;lid&eacute;s (Felidae) ou F&eacute;lins sont une famille de mammif&egrave;res placentaires de l&#39;ordre des carnivores et du sous-ordre des f&eacute;liformes. Si on exclut le taxon fossile des Proailurinae, qui ne poss&egrave;de qu&#39;un seul et unique genre connu, on y distingue trois sous-familles : les &laquo; petits f&eacute;lins &raquo; (Felinae), les &laquo; grands f&eacute;lins &raquo; (Pantherinae) et les f&eacute;lins dit &laquo; &agrave; dents de sabre &raquo; (Machairodontinae), aujourd&#39;hui &eacute;teints. Parmi leurs traits caract&eacute;ristiques figurent leur t&ecirc;te ronde au cr&acirc;ne raccourci, leur m&acirc;choire dot&eacute;e d&rsquo;environ trente dents, et leurs griffes r&eacute;tractiles, exception faite du chat viverrin et du chat &agrave; t&ecirc;te plate (semi-r&eacute;tractiles) et du gu&eacute;pard (non r&eacute;tractiles). Les f&eacute;lins sont digitigrades, c&rsquo;est-&agrave;-dire qu&rsquo;ils marchent en appuyant sur leurs doigts (la plante du pied ne se pose pas sur le sol).</p>\r\n\r\n<p>Proailurus, qui vivait en Eurasie il y a environ 25 millions d&rsquo;ann&eacute;es dans la p&eacute;riode de l&rsquo;Oligoc&egrave;ne, est &agrave; l&#39;heure actuelle consid&eacute;r&eacute; comme le plus vieux fossile de f&eacute;lid&eacute;. On consid&egrave;re Pseudaelurus comme le dernier anc&ecirc;tre commun des f&eacute;lins modernes.</p>	<img src="[MEDIA_URL]The_Felidae.jpg">\r\n\r\n<p>Коша́чьи, или ко́шки, или фели́ды (лат. Felidae), &mdash; семейство млекопитающих отряда хищных. Наиболее специализированные из хищников, приспособленные к добыванию животной пищи путём подкрадывания, подкарауливания, реже &mdash; преследования.</p>	4	\N
+3	t	1	f	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>Felidaeis a family of mammals in the order Carnivora, colloquially referred to as cats, and constitutes a clade. A member of this family is also called a felid. The term &quot;cat&quot; refers both to felids in general and specifically to the domestic cat (Felis catus).</p>\r\n\r\n<p>Felidae species exhibit the most diverse fur pattern of all terrestrial carnivores. Cats have retractile claws, slender muscular bodies and strong flexible forelimbs. Their teeth and facial muscles allow for a powerful bite. They are all obligate carnivores, and most are solitary predators ambushing or stalking their prey. Wild cats occur in Africa, Europe, Asia and the Americas. Some wild cat species are adapted to forest habitats, some to arid environments, and a few also to wetlands and mountainous terrain. Their activity patterns range from nocturnal and crepuscular to diurnal, depending on their preferred prey species.</p>\r\n\r\n<p>Reginald Innes Pocock divided the extant Felidae into three subfamilies: the Pantherinae, the Felinae and the Acinonychinae, differing from each other by the ossification of the hyoid apparatus and by the cutaneous sheaths which protect their claws. This concept has been revised following developments in molecular biology and techniques for analysis of morphological data. Today, the living Felidae are divided in two subfamilies: the Pantherinae and Felinae, with the Acinonychinae subsumed into the latter. Pantherinae includes five Panthera and two Neofelis species, while Felinae includes the other 34 species in ten genera.</p>\r\n\r\n<p>The first cats emerged during the Oligocene about 25 million years ago, with the appearance of Proailurus and Pseudaelurus. The latter species complex was ancestral to two main lines of felids: the cats in the extant subfamilies and a group of extinct cats of the subfamily Machairodontinae, which include the saber-toothed cats such as the Smilodon. The &quot;false sabre-toothed cats&quot;, the Barbourofelidae and Nimravidae, are not true cats, but are closely related. Together with the Felidae, Viverridae, hyaenas and mongooses, they constitute the Feliformia.</p>	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>貓科包括獅子、老虎和豹等動物，是食肉目的9個科中最具肉食性的哺乳動物。第一種的貓科動物出現於漸新世，人們更熟悉的家貓和人類在一万年前開始有關連。家貓的野生種親戚野貓，仍然生存在歐洲、非洲和亞洲東部等地，雖然棲地破壞限制了其居住的範圍。</p>\r\n\r\n<p>其他貓科動物中知名的成員有包括如獅子、老虎、豹和美洲豹等大貓，以及其他如美洲獅、獵豹、猞猁、獰貓和短尾貓等貓亚科动物。已滅絕的劍齒虎亞科為真的貓科動物，而其他如袋劍齒虎和獵貓等相似的動物則不是。</p>	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>Los f&eacute;lidos o com&uacute;nmente llamados felinos (Felidae) son una familia de mam&iacute;feros placentarios del orden Carnivora. Poseen un cuerpo esbelto, o&iacute;do agudo, hocico corto y excelente vista. Son los mam&iacute;feros cazadores m&aacute;s sigilosos. La mayor&iacute;a consume exclusivamente carne e ignora cualquier otra comida que no sea una presa viva. La capturan con sus afiladas garras y suelen matarla de un &uacute;nico y tenaz mordisco.</p>\r\n\r\n<p>A excepci&oacute;n de los guepardos, todos los f&eacute;lidos pueden retraer las u&ntilde;as de sus garras dentro de una vaina protectora mientras no las usan.</p>\r\n\r\n<p>Hay alrededor de cuarenta especies en esta familia; muchas de las cuales escasean en la actualidad, porque han sido objeto de caza por su piel, para aprovechar partes de su cuerpo, o porque su h&aacute;bitat est&aacute; siendo destruido, como pasa con el lince ib&eacute;rico (Lynx pardinus), el f&eacute;lido en mayor peligro de extinci&oacute;n.</p>\r\n\r\n<p>Excepto en Ant&aacute;rtida, Ocean&iacute;a y algunas islas, se los encuentra en todo el mundo.</p>	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>السِّنَّوْرِيَّات (بالإنجليزية: Felidae) أو الهِرِّيَّات أو القططيات فصيلةٌ من الحيوانات الثَّدْيِيَّة التي تضم كَثِيرًا من الأنواع مثل الأُسُود، و البُبُور، و النُّمُور، و الفُهُود، و القطط الأليفة والبرية، وأنواع عديدة أخرى.</p>	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>Les F&eacute;lid&eacute;s (Felidae) ou F&eacute;lins sont une famille de mammif&egrave;res placentaires de l&#39;ordre des carnivores et du sous-ordre des f&eacute;liformes. Si on exclut le taxon fossile des Proailurinae, qui ne poss&egrave;de qu&#39;un seul et unique genre connu, on y distingue trois sous-familles : les &laquo; petits f&eacute;lins &raquo; (Felinae), les &laquo; grands f&eacute;lins &raquo; (Pantherinae) et les f&eacute;lins dit &laquo; &agrave; dents de sabre &raquo; (Machairodontinae), aujourd&#39;hui &eacute;teints. Parmi leurs traits caract&eacute;ristiques figurent leur t&ecirc;te ronde au cr&acirc;ne raccourci, leur m&acirc;choire dot&eacute;e d&rsquo;environ trente dents, et leurs griffes r&eacute;tractiles, exception faite du chat viverrin et du chat &agrave; t&ecirc;te plate (semi-r&eacute;tractiles) et du gu&eacute;pard (non r&eacute;tractiles). Les f&eacute;lins sont digitigrades, c&rsquo;est-&agrave;-dire qu&rsquo;ils marchent en appuyant sur leurs doigts (la plante du pied ne se pose pas sur le sol).</p>\r\n\r\n<p>Proailurus, qui vivait en Eurasie il y a environ 25 millions d&rsquo;ann&eacute;es dans la p&eacute;riode de l&rsquo;Oligoc&egrave;ne, est &agrave; l&#39;heure actuelle consid&eacute;r&eacute; comme le plus vieux fossile de f&eacute;lid&eacute;. On consid&egrave;re Pseudaelurus comme le dernier anc&ecirc;tre commun des f&eacute;lins modernes.</p>	<img src="[MEDIA_URL]The_Felidae_mobile.jpg">\r\n\r\n<p>Коша́чьи, или ко́шки, или фели́ды (лат. Felidae), &mdash; семейство млекопитающих отряда хищных. Наиболее специализированные из хищников, приспособленные к добыванию животной пищи путём подкрадывания, подкарауливания, реже &mdash; преследования.</p>	4	\N
+4	f	1	f	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>In botany, a tree is a perennial plant with an elongated stem, or trunk, usually supporting branches and leaves. In some usages, the definition of a tree may be narrower, including only woody plants with secondary growth, plants that are usable as lumber or plants above a specified height. In wider definitions, the taller palms, tree ferns, bananas, and bamboos are also trees. Trees are not a taxonomic group but include a variety of plant species that have independently evolved a trunk and branches as a way to tower above other plants to compete for sunlight. The majority of tree species are angiosperms or hardwoods; of the rest, many are gymnosperms or softwoods. Trees tend to be long-lived, some reaching several thousand years old. Trees have been in existence for 370 million years. It is estimated that there are some three trillion mature trees in the world.</p>	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>在植物学中，树是一种多年生植物，具有细长的茎或树干，通常支撑树枝和树叶。在某些用法中，树的定义可能较窄，仅包括具有次生生长的木本植物、可用作木材的植物或高于指定高度的植物。在更广泛的定义中，较高的棕榈树、树蕨、香蕉和竹子也是树木。树木不是一个分类群，而是包括多种植物物种，它们独立地进化出树干和树枝，作为高出其他植物以争夺阳光的一种方式。大多数树种是被子植物或硬木；其余的，许多是裸子植物或软木。树木往往寿命很长，有的达到几千年。树木已经存在了 3.7 亿年。据估计，世界上有大约三万亿棵成熟的树木。</p>	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>En bot&aacute;nica, un &aacute;rbol es una planta perenne con un tallo o tronco alargado, que generalmente sostiene ramas y hojas. En algunos usos, la definici&oacute;n de un &aacute;rbol puede ser m&aacute;s estrecha e incluir solo plantas le&ntilde;osas con crecimiento secundario, plantas que se pueden usar como madera o plantas por encima de una altura espec&iacute;fica. En definiciones m&aacute;s amplias, las palmeras m&aacute;s altas, los helechos arborescentes, los pl&aacute;tanos y los bamb&uacute;es tambi&eacute;n son &aacute;rboles. Los &aacute;rboles no son un grupo taxon&oacute;mico, pero incluyen una variedad de especies de plantas que han desarrollado independientemente un tronco y ramas como una forma de sobresalir por encima de otras plantas para competir por la luz solar. La mayor&iacute;a de las especies de &aacute;rboles son angiospermas o maderas duras; del resto, muchas son gimnospermas o maderas blandas. Los &aacute;rboles tienden a ser longevos, algunos alcanzan varios miles de a&ntilde;os. Los &aacute;rboles existen desde hace 370 millones de a&ntilde;os. Se estima que hay unos tres billones de &aacute;rboles maduros en el mundo.</p>	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>في علم النبات ، تعتبر الشجرة نباتًا معمرًا له جذع أو جذع ممدود ، وعادةً ما يدعم الفروع والأوراق. في بعض الاستخدامات ، قد يكون تعريف الشجرة أضيق ، بما في ذلك النباتات الخشبية ذات النمو الثانوي فقط ، والنباتات التي يمكن استخدامها كخشب أو نباتات فوق ارتفاع محدد. في التعريفات الأوسع ، تعتبر أشجار النخيل الأطول وسراخس الأشجار والموز والخيزران أيضًا أشجارًا. الأشجار ليست مجموعة تصنيفية ولكنها تشمل مجموعة متنوعة من الأنواع النباتية التي طورت جذعًا وفروعًا بشكل مستقل كطريقة للرفع فوق النباتات الأخرى للتنافس على ضوء الشمس. غالبية أنواع الأشجار هي كاسيات البذور أو الأخشاب الصلبة ؛ من البقية ، العديد من عاريات البذور أو الأخشاب اللينة. تميل الأشجار إلى أن تكون طويلة العمر ، حيث يصل عمر بعضها إلى عدة آلاف من السنين. الأشجار موجودة منذ 370 مليون سنة. يقدر أن هناك حوالي ثلاثة تريليونات شجرة ناضجة في العالم.</p>	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>En botanique, un arbre est une plante vivace avec une tige allong&eacute;e, ou un tronc, supportant g&eacute;n&eacute;ralement des branches et des feuilles. Dans certains usages, la d&eacute;finition d&#39;un arbre peut &ecirc;tre plus &eacute;troite, y compris uniquement les plantes ligneuses &agrave; croissance secondaire, les plantes utilisables comme bois d&#39;&oelig;uvre ou les plantes au-dessus d&#39;une hauteur sp&eacute;cifi&eacute;e. Dans des d&eacute;finitions plus larges, les palmiers plus grands, les foug&egrave;res arborescentes, les bananes et les bambous sont &eacute;galement des arbres. Les arbres ne sont pas un groupe taxonomique, mais comprennent une vari&eacute;t&eacute; d&#39;esp&egrave;ces v&eacute;g&eacute;tales qui ont d&eacute;velopp&eacute; ind&eacute;pendamment un tronc et des branches comme un moyen de dominer les autres plantes pour rivaliser pour la lumi&egrave;re du soleil. La majorit&eacute; des esp&egrave;ces d&#39;arbres sont des angiospermes ou des feuillus; du reste, beaucoup sont des gymnospermes ou des r&eacute;sineux. Les arbres ont tendance &agrave; vivre longtemps, certains atteignant plusieurs milliers d&#39;ann&eacute;es. Les arbres existent depuis 370 millions d&#39;ann&eacute;es. On estime qu&#39;il y a environ trois billions d&#39;arbres matures dans le monde.</p>	<img src="[MEDIA_URL]lukasz-szmigiel-jFCViYFYcus-unsplash.jpg">\r\n\r\n<p>В ботанике дерево &mdash; это многолетнее растение с удлиненным стеблем или стволом, обычно поддерживающим ветви и листья. В некоторых случаях определение дерева может быть более узким, включая только древесные растения с вторичным ростом, растения, которые можно использовать в качестве пиломатериалов, или растения выше определенной высоты. В более широком смысле более высокие пальмы, древовидные папоротники, бананы и бамбук также являются деревьями. Деревья не являются таксономической группой, но включают в себя множество видов растений, которые независимо развили ствол и ветви, чтобы возвышаться над другими растениями, чтобы конкурировать за солнечный свет. Большинство видов деревьев - покрытосеменные или лиственные; из остальных многие голосеменные или хвойные. Деревья, как правило, живут долго, некоторым из них несколько тысяч лет. Деревья существуют уже 370 миллионов лет. По оценкам, в мире насчитывается около трех триллионов взрослых деревьев.</p>	6	\N
+5	f	1	t	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>An Internet forum, or message board, is an online discussion site where people can hold conversations in the form of posted messages. They differ from chat rooms in that messages are often longer than one line of text, and are at least temporarily archived. Also, depending on the access level of a user or the forum set-up, a posted message might need to be approved by a moderator before it becomes publicly visible.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>互联网论坛或留言板是一个在线讨论站点，人们可以在其中以发布消息的形式进行对话。它们与聊天室的不同之处在于消息通常比一行文本长，并且至少是临时存档的。此外，根据用户的访问级别或论坛设置，发布的消息可能需要经过版主的批准才能公开可见。</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>Un foro de Internet, o tablero de mensajes, es un sitio de discusi&oacute;n en l&iacute;nea donde las personas pueden mantener conversaciones en forma de mensajes publicados. Se diferencian de las salas de chat en que los mensajes suelen tener m&aacute;s de una l&iacute;nea de texto y se archivan al menos temporalmente. Adem&aacute;s, seg&uacute;n el nivel de acceso de un usuario o la configuraci&oacute;n del foro, es posible que un moderador deba aprobar un mensaje publicado antes de que sea visible p&uacute;blicamente.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>منتدى الإنترنت ، أو لوحة الرسائل ، هو موقع مناقشة عبر الإنترنت حيث يمكن للأشخاص إجراء محادثات في شكل رسائل منشورة. وهي تختلف عن غرف الدردشة من حيث أن الرسائل غالبًا ما تكون أطول من سطر واحد من النص ، ويتم أرشفتها مؤقتًا على الأقل. أيضًا ، اعتمادًا على مستوى وصول المستخدم أو إعداد المنتدى ، قد تحتاج الرسالة المنشورة إلى الموافقة عليها من قبل المشرف قبل أن تصبح مرئية للعامة.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>Un forum Internet, ou babillard &eacute;lectronique, est un site de discussion en ligne o&ugrave; les gens peuvent tenir des conversations sous la forme de messages publi&eacute;s. Ils diff&egrave;rent des salons de discussion en ce que les messages sont souvent plus longs qu&#39;une ligne de texte et sont au moins temporairement archiv&eacute;s. En outre, selon le niveau d&#39;acc&egrave;s d&#39;un utilisateur ou la configuration du forum, un message publi&eacute; peut devoir &ecirc;tre approuv&eacute; par un mod&eacute;rateur avant de devenir visible publiquement.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech.jpg">\r\n\r\n<p>Интернет-форум или доска объявлений &mdash; это дискуссионный онлайн-сайт, на котором люди могут вести беседы в форме опубликованных сообщений. Они отличаются от чатов тем, что сообщения часто длиннее одной строки текста и по крайней мере временно архивируются. Кроме того, в зависимости от уровня доступа пользователя или настройки форума может потребоваться одобрение модератором опубликованного сообщения, прежде чем оно станет общедоступным.</p>	\N	\N
+6	t	1	t	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>An Internet forum, or message board, is an online discussion site where people can hold conversations in the form of posted messages. They differ from chat rooms in that messages are often longer than one line of text, and are at least temporarily archived. Also, depending on the access level of a user or the forum set-up, a posted message might need to be approved by a moderator before it becomes publicly visible.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>互联网论坛或留言板是一个在线讨论站点，人们可以在其中以发布消息的形式进行对话。它们与聊天室的不同之处在于消息通常比一行文本长，并且至少是临时存档的。此外，根据用户的访问级别或论坛设置，发布的消息可能需要经过版主的批准才能公开可见。</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>Un foro de Internet, o tablero de mensajes, es un sitio de discusi&oacute;n en l&iacute;nea donde las personas pueden mantener conversaciones en forma de mensajes publicados. Se diferencian de las salas de chat en que los mensajes suelen tener m&aacute;s de una l&iacute;nea de texto y se archivan al menos temporalmente. Adem&aacute;s, seg&uacute;n el nivel de acceso de un usuario o la configuraci&oacute;n del foro, es posible que un moderador deba aprobar un mensaje publicado antes de que sea visible p&uacute;blicamente.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>منتدى الإنترنت ، أو لوحة الرسائل ، هو موقع مناقشة عبر الإنترنت حيث يمكن للأشخاص إجراء محادثات في شكل رسائل منشورة. وهي تختلف عن غرف الدردشة من حيث أن الرسائل غالبًا ما تكون أطول من سطر واحد من النص ، ويتم أرشفتها مؤقتًا على الأقل. أيضًا ، اعتمادًا على مستوى وصول المستخدم أو إعداد المنتدى ، قد تحتاج الرسالة المنشورة إلى الموافقة عليها من قبل المشرف قبل أن تصبح مرئية للعامة.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>Un forum Internet, ou babillard &eacute;lectronique, est un site de discussion en ligne o&ugrave; les gens peuvent tenir des conversations sous la forme de messages publi&eacute;s. Ils diff&egrave;rent des salons de discussion en ce que les messages sont souvent plus longs qu&#39;une ligne de texte et sont au moins temporairement archiv&eacute;s. En outre, selon le niveau d&#39;acc&egrave;s d&#39;un utilisateur ou la configuration du forum, un message publi&eacute; peut devoir &ecirc;tre approuv&eacute; par un mod&eacute;rateur avant de devenir visible publiquement.</p>	<img src="[MEDIA_URL]rear-view-female-business-executive-giving-speech-mobile.jpg">\r\n\r\n<p>Интернет-форум или доска объявлений &mdash; это дискуссионный онлайн-сайт, на котором люди могут вести беседы в форме опубликованных сообщений. Они отличаются от чатов тем, что сообщения часто длиннее одной строки текста и по крайней мере временно архивируются. Кроме того, в зависимости от уровня доступа пользователя или настройки форума может потребоваться одобрение модератором опубликованного сообщения, прежде чем оно станет общедоступным.</p>	\N	\N
+\.
+
+
+--
+-- Data for Name: article_media; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.article_media (id, image, md5, size) FROM stdin;
+1	fruit.jpg	98eca33cbd2b1c333778ba16fc145f73	144722
+3	The_Felidae_mobile.jpg	5fa791889ef16910e74affeed8fcba93	72584
+14	The_Felidae.jpg	39e202eddabd54ecedf91e42f23ccf35	152885
+15	rear-view-female-business-executive-giving-speech.jpg	0a69e403c151a0adf17481246ed8b5ae	39747
+16	rear-view-female-business-executive-giving-speech-mobile.jpg	d3496b10e094d81549bc7e534c9190e0	24146
+4	trees.jpg	e2ea26fd6b4e29ff0d18fe1dc17b107a	97438
+\.
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add content type	4	add_contenttype
+14	Can change content type	4	change_contenttype
+15	Can delete content type	4	delete_contenttype
+16	Can view content type	4	view_contenttype
+17	Can add session	5	add_session
+18	Can change session	5	change_session
+19	Can delete session	5	delete_session
+20	Can view session	5	view_session
+21	Can add participant	6	add_participant
+22	Can change participant	6	change_participant
+23	Can delete participant	6	delete_participant
+24	Can view participant	6	view_participant
+25	Can add category	7	add_category
+26	Can change category	7	change_category
+27	Can delete category	7	delete_category
+28	Can view category	7	view_category
+29	Can add topic	8	add_topic
+30	Can change topic	8	change_topic
+31	Can delete topic	8	delete_topic
+32	Can view topic	8	view_topic
+33	Can add opinion	9	add_opinion
+34	Can change opinion	9	change_opinion
+35	Can delete opinion	9	delete_opinion
+36	Can view opinion	9	view_opinion
+37	Can add opinion attachment	10	add_opinionattachment
+38	Can change opinion attachment	10	change_opinionattachment
+39	Can delete opinion attachment	10	delete_opinionattachment
+40	Can view opinion attachment	10	view_opinionattachment
+41	Can add article media	11	add_articlemedia
+42	Can change article media	11	change_articlemedia
+43	Can delete article media	11	delete_articlemedia
+44	Can view article media	11	view_articlemedia
+45	Can add article	12	add_article
+46	Can change article	12	change_article
+47	Can delete article	12	delete_article
+48	Can view article	12	view_article
+49	Can add jumbotron	13	add_jumbotron
+50	Can change jumbotron	13	change_jumbotron
+51	Can delete jumbotron	13	delete_jumbotron
+52	Can view jumbotron	13	view_jumbotron
+\.
+
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.category (id, order_by_this, slug, show_in_top_nav, en_name, zh_hans_name, es_name, ar_name, fr_name, ru_name, apex_id) FROM stdin;
+1	10	category-1	t	Category 1	第一类	Categoría 1	الفئة 1	Catégorie 1	Категория 1	\N
+3	30	category-3	f	Category 3	第 3 类	Categoría 3	الفئة 3	Catégorie 3	Категория 3	\N
+2	20	category-2	t	Category 2	第 2 类	Categoría 2	الفئة 2	Catégorie 2	Категория 2	\N
+7	21	subcategory-1-of-second-category	t	Subcategory 1 of second category	第二类子类 1	Subcategoría 1 de segunda categoría	الفئة الفرعية 1 من الفئة الثانية	Sous-catégorie 1 de la deuxième catégorie	Подкатегория 1 второй категории	2
+8	22	subcategory-2-of-second-category	t	Subcategory 2 of second category	第二类子类 2	Subcategoría 2 de segunda categoría	الفئة الفرعية 2 من الفئة الثانية	Sous-catégorie 2 de la deuxième catégorie	Подкатегория 2 второй категории	2
+9	23	subcategory-3-of-second-category	f	Subcategory 3 of second category	第二类子类 3	Subcategoría 3 de segunda categoría	الفئة الفرعية 3 من الفئة الثانية	Sous-catégorie 3 de la deuxième catégorie	Подкатегория 3 второй категории	2
+10	31	subcategory-1-of-third-category	f	Subcategory 1 of third category	第三类子类 1	Subcategoría 1 de tercera categoría	الفئة الفرعية 1 من الفئة الثالثة	Sous-catégorie 1 de la troisième catégorie	Подкатегория 1 третьей категории	3
+11	32	subcategory-2-of-third-category	f	Subcategory 2 of third category	第三类子类 2	Subcategoría 2 de tercera categoría	الفئة الفرعية 2 من الفئة الثالثة	Sous-catégorie 2 de la troisième catégorie	Подкатегория 2 третьей категории	3
+12	33	subcategory-3-of-third-category	f	Subcategory 3 of third category	第三类子类 3	Subcategoría 3 de tercera categoría	الفئة الفرعية 3 من الفئة الثالثة	Sous-catégorie 3 de la troisième catégorie	Подкатегория 3 третьей категории	3
+4	11	felidae	t	Felidae	猫科	Felidae	سنوريات	Felidae	Кошачьи	1
+5	12	fruits	t	Fruits	水果列表	Frutas	ثمرة	Fruits	Фрукты	1
+6	13	trees	t	Trees	树木	Árboles	الأشجار	Des arbres	Деревья	1
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	contenttypes	contenttype
+5	sessions	session
+6	participant	participant
+7	category	category
+8	topic	topic
+9	opinion	opinion
+10	opinion	opinionattachment
+11	article	articlemedia
+12	article	article
+13	jumbotron	jumbotron
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2022-10-04 19:18:43.399305+00
+2	contenttypes	0002_remove_content_type_name	2022-10-04 19:18:43.417463+00
+3	auth	0001_initial	2022-10-04 19:18:43.500555+00
+4	auth	0002_alter_permission_name_max_length	2022-10-04 19:18:43.510842+00
+5	auth	0003_alter_user_email_max_length	2022-10-04 19:18:43.520088+00
+6	auth	0004_alter_user_username_opts	2022-10-04 19:18:43.529964+00
+7	auth	0005_alter_user_last_login_null	2022-10-04 19:18:43.538953+00
+8	auth	0006_require_contenttypes_0002	2022-10-04 19:18:43.544611+00
+9	auth	0007_alter_validators_add_error_messages	2022-10-04 19:18:43.558047+00
+10	auth	0008_alter_user_username_max_length	2022-10-04 19:18:43.572009+00
+11	auth	0009_alter_user_last_name_max_length	2022-10-04 19:18:43.586283+00
+12	auth	0010_alter_group_name_max_length	2022-10-04 19:18:43.603659+00
+13	auth	0011_update_proxy_permissions	2022-10-04 19:18:43.61718+00
+14	auth	0012_alter_user_first_name_max_length	2022-10-04 19:18:43.630193+00
+15	participant	0001_initial	2022-10-04 19:18:43.735312+00
+16	admin	0001_initial	2022-10-04 19:18:43.776811+00
+17	admin	0002_logentry_remove_auto_add	2022-10-04 19:18:43.787716+00
+18	admin	0003_logentry_add_action_flag_choices	2022-10-04 19:18:43.797225+00
+19	category	0001_initial	2022-10-04 19:18:43.837814+00
+20	topic	0001_initial	2022-10-04 19:18:43.881144+00
+21	article	0001_initial	2022-10-04 19:18:43.931271+00
+22	jumbotron	0001_initial	2022-10-04 19:18:43.975396+00
+23	opinion	0001_initial	2022-10-04 19:18:44.089194+00
+24	sessions	0001_initial	2022-10-04 19:18:44.12221+00
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: jumbotron; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jumbotron (id, page_home, en_content, zh_hans_content, es_content, ar_content, fr_content, ru_content, category_id, topic_id) FROM stdin;
+2	f	<h1><h1>This inscription is displayed in the third category</h1></h1>	<h1>此铭文显示在第三类中</h1>	<h1>Esta inscripción se muestra en la tercera categoría.</h1>	<h1>يتم عرض هذا النقش في الفئة الثالثة</h1>	<h1>Cette inscription est affichée dans la troisième catégorie</h1>	<h1>Эта надпись отображается в третьей категории</h1>	3	\N
+3	f	<h1>This inscription is displayed in the second category</h1>	<h1>此铭文显示在第二类中</h1>	<h1>Esta inscripción se muestra en la segunda categoría.</h1>	<h1>يتم عرض هذا النقش في الفئة الثانية</h1>	<h1>Cette inscription est affichée dans la deuxième catégorie</h1>	<h1>Эта надпись отображается во второй категории</h1>	2	\N
+4	f	<h1>This is the First category</h1>	<h1>这是第一类</h1>	<h1>Esta es la primera categoría</h1>	<h1>هذه هي الفئة الأولى</h1>	<h1>C'est la première catégorie</h1>	<h1>Это первая категория</h1>	1	\N
+7	f	<h1>This inscription is displayed in the subcategory 3 of the first category</h1>	<h1>此铭文显示在第一类的子类 3 中</h1>	<h1>Esta inscripción se muestra en la subcategoría 3 de la primera categoría</h1>	<h1>يتم عرض هذا النقش في الفئة الفرعية 3 من الفئة الأولى</h1>	<h1>Cette inscription est affichée dans la sous-catégorie 3 de la première catégorie</h1>	<h1>Эта надпись отображается в подкатегории 3 первой категории</h1>	6	\N
+5	f	<h1>Meow</h1>	<h1>喵</h1>	<h1>Maullar</h1>	<h1>مواء</h1>	<h1>Miaou</h1>	<h1>Мяу</h1>	4	\N
+6	f	<h1>Healthy</h1>	<h1>健康</h1>	<h1>Saludable</h1>	<h1>صحي</h1>	<h1>En bonne santé</h1>	<h1>Полезно</h1>	5	\N
+1	t	<h1>Welcome to the forum</h1><h2>We wish you good communication</h2><h3>Topics in the section "Category 1 / Felidae"</h3>	<h1>欢迎来到论坛</h1><h2>祝您沟通愉快</h2><h3>“第一类 / 猫科”部分中的主题</h3>	<h1>Bienvenida al foro</h1><h2>Le deseamos una buena comunicación.</h2><h3>Temas en la sección "Categoría 1 / Felidae"</h3>	<h1>مرحبا بكم في منتدى</h1><h2>نتمنى لكم التواصل الجيد</h2><h3>موضوعات في قسم "الفئة 1 / سنوريات"</h3>	<h1>Bienvenue sur le forum</h1><h2>Nous vous souhaitons une bonne communication</h2><h3>Sujets dans la rubrique "Catégorie 1 / Felidae"</h3>	<h1>Добро пожаловать на форум</h1><h2>Желаем хорошего общения</h2><h3>Топики в разделе "Категория 1 / Кошачьи"</h3>	\N	\N
+\.
+
+
+--
+-- Data for Name: opinion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.opinion (id, recorded, updated, status, reason_for_rejection, apex_language, en_text, zh_hans_text, es_text, ar_text, fr_text, ru_text, apex_id, publisher_id, topic_id) FROM stdin;
+1	2022-10-06 17:26:32.36401+00	2022-10-06 19:45:18.713453+00	1			The cheetah (Acinonyx jubatus) is a large cat native to Africa and central Iran. It is the fastest land animal, estimated to be capable of running at 80 to 128 km/h (50 to 80 mph) with the fastest reliably recorded speeds being 93 and 98 km/h (58 and 61 mph), and as such has several adaptations for speed, including a light build, long thin legs and a long tail. It typically reaches 67–94 cm (26–37 in) at the shoulder, and the head-and-body length is between 1.1 and 1.5 m (3 ft 7 in and 4 ft 11 in). Adults weigh between 21 and 72 kg (46 and 159 lb). Its head is small and rounded, with a short snout and black tear-like facial streaks. The coat is typically tawny to creamy white or pale buff and is mostly covered with evenly spaced, solid black spots. Four subspecies are recognised.\r\n\r\nThe cheetah lives in three main social groups: females and their cubs, male "coalitions", and solitary males. While females lead a nomadic life searching for prey in large home ranges, males are more sedentary and instead establish much smaller territories in areas with plentiful prey and access to females. The cheetah is active during the day, with peaks during dawn and dusk. It feeds on small- to medium-sized prey, mostly weighing under 40 kg (88 lb), and prefers medium-sized ungulates such as impala, springbok and Thomson's gazelles. The cheetah typically stalks its prey to within 60–70 m (200–230 ft), charges towards it, trips it during the chase and bites its throat to suffocate it to death. It breeds throughout the year. After a gestation of nearly three months, a litter of typically three or four cubs is born. Cheetah cubs are highly vulnerable to predation by other large carnivores such as hyenas and lions. They are weaned at around four months and are independent by around 20 months of age.\r\n\r\nThe cheetah occurs in a variety of habitats such as savannahs in the Serengeti, arid mountain ranges in the Sahara and hilly desert terrain in Iran. The cheetah is threatened by several factors such as habitat loss, conflict with humans, poaching and high susceptibility to diseases. Historically ranging throughout most of Sub-Saharan Africa and extending eastward into the Middle East and to central India, the cheetah is now distributed mainly in small, fragmented populations in central Iran and southern, eastern and northwestern Africa. In 2016, the global cheetah population was estimated at 7,100 individuals in the wild; it is listed as Vulnerable on the IUCN Red List. In the past, cheetahs were tamed and trained for hunting ungulates. They have been widely depicted in art, literature, advertising, and animation.	猎豹（学名：Acinonyx jubatus）又称印度豹，是一种大型猫科动物，猎豹属现存唯一的物种。野生种群现分布于非洲和伊朗，历史上还曾见于西亚、中亚与南亚各国，栖息在较为干旱炎热的开阔生境，包括草原、半沙漠及裸岩地区。因被英国殖民时期的印度皇室大量饲养，用于狩猎羚羊和鹿，加之外貌与豹相似，故称猎豹（英文：Cheetah）。其被毛呈黄褐色或淡黄色，吻部、颔部、胸腹部和四肢内侧为白色；体表遍布黑色斑点，与豹相比其斑点较小且均为实心；头小而圆，吻较短，眼部有白斑，内眼角沿鼻吻部两侧各有一道明显的黑纹。分为4个亚种：东南非猎豹、东北非猎豹、西北非猎豹和亚洲猎豹；其中数量最多、体型最大的为东南非猎豹，成年雄性体重29－71千克，均重45千克，成年雌性21－63千克，均重38千克；其他3个亚种的成年体重一般在35千克以下。\r\n\r\n猎豹既可独居，也可由近亲属或配偶组成小群活动，是除狮子外最倾向群居的猫科。主食为小型羚羊，而群居的猎豹会合作捕食斑马、角马等大型有蹄动物。与其他猫科主要依靠伏击的捕猎方式不同，猎豹主要依靠奔跑进行追逐式捕猎，并以其惊人的奔跑速度而闻名，最高时速可超过110千米，是世界上跑得最快的动物。然而，猎豹因肢体纤弱，攀缘和弹跳能力远不及其他猫科，为猫科中最不善爬树者。\r\n\r\n为适应快速奔跑，猎豹演化出了猫科中颇为独特的身体结构。其骨架轻盈，躯干瘦削，四肢修长从而形成高挑的身材，脊椎富有弹性便于舒张，一条长尾在跑步转弯时可保持身体平衡。此外，猎豹是唯一不能伸缩爪子的猫科，其爪子较钝，作用类似跑鞋的鞋钉，能在高速奔跑时紧扣地面，防止摔跤或打滑。这些特征使猎豹一度被认为是猫科中的异类。旧时的形态学分类将其单列为猎豹亚科（Acinonychinae），独立于猫亚科与豹亚科之外；现代遗传学研究则证实猎豹属于猫亚科，与美洲金猫类（美洲狮、细腰猫等）同源，它们的最近共同祖先生活在670万年前的北美草原，约490万年前分化为猎豹类和美洲金猫类。猎豹经白令陆桥进入旧大陆后，其北美的亲族最终于1.1万年前的更新世末灭绝。\r\n\r\n由于受到人类侵害，猎豹在许多亚非国家均已绝迹，特别是仅存不足100只的亚洲猎豹，正处于灭亡边缘，致危因素是过去遭大量猎杀，且人类过度放牧造成其栖息地退化和猎物密度降低，以及近代以来频发的交通事故。	El guepardo o chita (Acinonyx jubatus)1​ es un miembro atípico de la familia de los félidos. Es el único representante vivo del género Acinonyx. Caza gracias a su vista y a su gran velocidad. Es el animal terrestre más veloz, ya que alcanza una velocidad punta de 115 km/h en carreras de hasta cuatrocientos o quinientos metros.4​5​6​7​ Las hembras pueden tener hasta cinco cachorros por camada. Su presa principal es la gacela de Thomson.\r\n\r\nEl guepardo es uno de los felinos que tienen mayor riesgo a desaparecer puesto que sus cifras se han reducido a más del 50% en los últimos veinticinco años y su hábitat ha desaparecido un 90%. En el año 2020 se estimó que quedaban menos de siete mil guepardos en libertad.	الفَهْدُ أو النمر الصيّاد\r\n\r\nهو نوع فريد من فصيلة السنوريات، يتميز بسرعة فائقة لا ينازعه فيها أحد من أبناء فصيلته ولا أي نوع آخر من الدواب، وبذلك فهو يعتبر أسرع حيوان على وجه الأرض، إلا أن تلك السرعة الفائقة يقابلها ضعف بنيوي كبير عند المقارنة بأنواع أخرى من هذه الفصيلة، إذ أن تأقلم أجساد هذه الحيوانات للعدو جعل منها نحيلة لا تقوى على قتال الضواري الأكبر حجمًا والطرائد الأضخم قدًا.\r\n\r\nوالفهود هي الممثلة الوحيدة لجنس «ثابتة المخالب» (باللاتينية: Acinonyx) في العصر الحالي، إذ أن جميع الأنواع المنتمية لهذا الجنس اندثرت عن وجه الأرض قبل آلاف السنين بسبب العوامل الطبيعية. تتراوح سرعة الفهد بين 112 و120 كيلومترًا في الساعة (بين 70 و75 ميل في الساعة)،\r\nوذلك في المسافات القصيرة حتى 460 مترًا (1,510 أقدام)، ولها القدرة على الوصول إلى سرعة 103 كيلومترات في الساعة انطلاقًا من الصفر خلال 3 ثوان فقط، وهذا يجعلها أسرع من معظم السيارات الفائقة. كانت مقولة أن الفهد هو أسرع الثدييات عدوًا مقولة مشكوكًا بصحتها، ذلك أن بعض الحيوانات، مثل الوعل شوكي القرون من أمريكا الشمالية، قادرة على مقارعة الفهود من ناحية العدو، إلا أن بعض الدراسات أثبتت مؤخرًا أن الفهود هي بالفعل أسرع الحيوانات.تصنف القائمة الحمراء للاتحاد العالمي للحفاظ على الطبيعية الفهد على أنه نوع مهدد بالانقراض بدرجة منخفضة،\r\n\r\nوالسبب الرئيسي وراء ذلك هو الاضطهاد البشري المستمر في المناطق حيث تسود تربية الماشية بشكل أساسي، ذلك أن المربين يقتلون الفهود لاستهدافها الخراف والماعز بطيئة الحركة، إضافة إلى أنهم يقومون بتدمير مسكنها على الدوام وتجزئتها في سبيل إنشاء مراعي لمواشيهم.\r\n\r\nكانت الفهود واسعة الانتشار سابقًا في أجزاء عديدة من العالم القديم، أما اليوم فهي مبعثرة مع تجمع جمهراتها الرئيسية في أفريقيا جنوب الصحراء الكبرى، ويعيش البعض منها في جيوب معزولة في شمال أفريقيا وإيران وباكستان. أما أكبر تجمّع للفهود في العالم فهو في ناميبيا بجنوب غرب القارة الأفريقية، التي يدعوها البعض «أرض الفهود».	Le guépard (Acinonyx jubatus) est un grand mammifère carnassier de la famille des félidés vivant en Afrique et en Asie de l'Ouest. Le guépard a une allure svelte et fine, avec de longues pattes élancées (aux griffes semi-rétractiles ou non-rétractiles selon les sources), et une face au museau court marquée par deux traces noires partant des yeux. Son pelage est entièrement tacheté de noir sur un fond fauve à beige très clair ; les petits sont pourvus d'une courte crinière qui disparaît à l'âge adulte. Il est considéré comme l'animal terrestre le plus rapide au monde, sa vitesse à la course pouvant atteindre 112 km/h.\r\n\r\nClassé vulnérable par l'Union internationale pour la conservation de la nature, le guépard fait actuellement l'objet de diverses tentatives de protection, incluant des procédés de clonage. L'espèce est divisée en cinq sous-espèces présentant des différences mineures de morphologie ou de comportement. Parmi celles-ci, le guépard asiatique, le guépard du Sahara et le guépard d'Afrique du Nord-Est sont classées en danger critique d'extinction. La population de guépards est passée de 100 000 individus au début du XXe siècle à 7 100 en 2019.	Гепа́рд (устар. охотничий леопард; лат. Acinonyx jubatus) — хищное млекопитающее семейства кошачьих, обитает в большинстве стран Африки, а также на Ближнем Востоке. Это единственный современный представитель рода Acinonyx. Быстрейшее из всех наземных млекопитающих: за 3 секунды может развивать скорость до 110 км/ч[1][2][3][4][5][6]. Согласно другим данным, максимальная скорость гепардов достигает 93 км/ч[7][8].\r\n\r\n20 июня 2012 года одиннадцатилетняя самка гепарда по кличке Сара установила новый мировой рекорд в забеге на сто метров среди животных в США, пробежав данную дистанцию за 5,95 секунды. Забег проходил в зоопарке американского города Цинциннати.	\N	1	6
+2	2022-10-07 16:56:11.528984+00	2022-10-07 17:02:35.405829+00	1			A lynx is any of the four species (the Canada lynx, Iberian lynx, Eurasian lynx, or bobcat) within the medium-sized wild cat genus Lynx. The name lynx originated in Middle English via Latin from the Greek word λύγξ, derived from the Indo-European root leuk- ('light, brightness') in reference to the luminescence of its reflective eyes.	猞猁屬（學名：Lynx），短尾胸腹白毛耳尖黑毛，也稱為山貓、大山貓、林㹭，是哺乳綱食肉目貓科的一屬，主要分為四種：\r\n\r\n    歐亞猞猁（Lynx lynx）：最常見種，也可直接稱為猞猁。\r\n    加拿大猞猁（Lynx canadensis）：根據有些消息來源認為是歐亞猞猁的亞種。\r\n    南歐猞猁（Lynx pardinus）：又名伊比利亞猞猁或西班牙猞猁，主要棲息於西班牙西南部和極少分佈在葡萄牙，稀有種類，已近瀕臨滅絕。世界自然保護聯盟列為極危物種。\r\n    短尾貓（Lynx rufus）：體型最小的猞猁。	Lynx es un género de mamíferos carnívoros de la familia Felidae coloquialmente conocidos como linces. Se conocen cuatro especies caracterizadas por su tamaño medio, fuertes patas, largas orejas, cola corta y cuerpo más o menos moteado. Todas las especies habitan exclusivamente en el Hemisferio Norte, en Eurasia y Norteamérica (de donde parecen ser originarios). El llamado lince africano (Caracal caracal), que habita en África y gran parte de Asia Central y Occidental, es en realidad un felino escasamente emparentado que guarda algunas semejanzas externas con los representantes del género Lynx fruto de la convergencia evolutiva, como son su cola, excepcionalmente corta (poco más que un simple muñón), y sus grandes orejas, coronadas por largos penachos de pelo negro en la punta que sirven para incrementar su, ya de por sí, gran audición. También existen unos característicos mechones de pelo largo en las mejillas.	الوَشَق (الاسم العلمي: Lynx) حيوان لاحم مفترس من فصيلة السنوريات وهو مختلف عن حيوان عناق الأرض. غذاؤه الرئيسي الفرائس الصغيرة كالأرانب و الثعالب وغيرها من الحيوانات.	Les lynx (genre Lynx) sont des félins de la sous-famille des félinés. Parmi les félins, les lynx sont aisément reconnaissables à leur face ornée de favoris, à leurs oreilles triangulaires surmontées d'une touffe de poils noirs, et à leur corps doté d'une courte queue et de longues pattes. Parmi les caractéristiques moins visibles, les lynx ne possèdent que 28 dents, au lieu des 30 dents habituelles chez les félins.\r\n\r\nDescendants du Lynx d'Issoire, les lynx ont connu de plusieurs classifications taxinomiques différentes et les diverses espèces ont tour à tour été sous-espèces puis espèces à part entière. Depuis la fin du XXe siècle, seules quatre espèces sont reconnues : le Lynx du Canada (Lynx canadensis), le Lynx boréal (Lynx lynx), le Lynx pardelle (Lynx pardinus) et le Lynx roux (Lynx rufus). Le Caracal, qui physiquement ressemble aux lynx, a longtemps fait partie du genre Lynx et est encore appelé « Lynx du désert ».\r\n\r\nPrédateurs de l'hémisphère nord, les lynx ont pour habitat préféré la forêt boréale. Considérés comme très largement répandus, exception faite du Lynx pardelle gravement menacé, ils font partie des rares félins dont on estime les populations stables. Alors qu'ils tenaient une place importante dans la mythologie amérindienne, les lynx étaient fort méconnus en Europe et y ont souffert d'une réputation de bête féroce.Le lynx est exclusivement carnivore; sa proie principale est le lièvre d'Amérique. Il mange également des souris, des écureuils et des oiseaux tels que le tétras.	Ры́си (лат. Lynx, др.-рус. *рьсъ «рыжий») — род хищных млекопитающих семейства кошачьих, наиболее близкий к роду кошек (Felis).\r\n\r\nК нему относятся несколько видов кошек средних размеров:\r\n\r\n    Обыкновенная рысь (Lynx lynx)\r\n    Канадская рысь (Lynx canadensis); некоторые источники считают её подвидом обыкновенной рыси\r\n    Пиренейская рысь (Lynx pardinus). Водится на юго-западе Испании (большая часть — в Национальном парке Кото Доньяна). Внесена в Приложение I CITES (Конвенции о международной торговле вымирающими видами дикой фауны и флоры), а также в списки Всемирного союза охраны природы (IUCN), в категорию 1 (животные, подвергающиеся угрозе исчезновения).\r\n    Рыжая рысь (Lynx rufus)\r\n    † Lynx issiodorensis\r\n\r\nСтепная рысь и болотная рысь, несмотря на названия, филогенетически не относятся к данному роду.\r\n\r\nРысь — типичная кошка, хотя величиной с крупную собаку, которую отчасти напоминает своим укороченным телом и длинноногостью. Очень характерна голова рыси: сравнительно небольшая, округлая и очень выразительная. Рост обычной рыси достигает 55 см, канадской от 48 см до 56 см, а пиренейской — от 60 до 70 см. От других кошачьих рыси отличаются коротким хвостом и кисточками на концах ушей. Масса тела рыси от 10 до 20 кг.\r\n\r\nВ скандинавской традиции рысь была священным животным богини Фрейи. Считалось, что рыси впряжены в её колесницу. Древние греки верили, что острый взор рыси способен пронзать насквозь непрозрачные предметы. Своё научное название это животное получило от др.-греч. λύγξ, рысь.	\N	1	5
+3	2022-10-07 17:09:57.097668+00	2022-10-07 17:17:51.505773+00	1			The snow leopard (Panthera uncia), also known as the ounce, is a felid in the genus Panthera native to the mountain ranges of Central and South Asia. It is listed as Vulnerable on the IUCN Red List because the global population is estimated to number fewer than 10,000 mature individuals and is expected to decline about 10% by 2040. It is threatened by poaching and habitat destruction following infrastructural developments. It inhabits alpine and subalpine zones at elevations of 3,000–4,500 m (9,800–14,800 ft), ranging from eastern Afghanistan, the Himalayas and the Tibetan Plateau to southern Siberia, Mongolia and western China. In the northern part of its range, it also lives at lower elevations.\r\n\r\nTaxonomically, the snow leopard was long classified in the monotypic genus Uncia. Since phylogenetic studies revealed the relationships among Panthera species, it has been considered a member of that genus. Two subspecies were described based on morphological differences, but genetic differences between the two have not been confirmed. It is therefore regarded as a monotypic species.	雪豹（學名：Panthera uncia），又名艾葉豹、荷葉豹、草豹，中亞與部分中國西部民族則又稱伊尔毕斯（哈薩克語：Ілбіс；蒙古語：Ирвэс），有“雪山之王”之称，是一种重要的大型猫科食肉动物和旗舰种，由于其常在雪线附近和雪地间活动，故名“雪豹”。雪豹原产于亚洲中部山区，天山等高海拔山地是雪豹的主要分布地。其皮毛为灰白色，有黑色点斑和黑环，相对长而粗大的尾巴是雪豹与其他相似物种区分的明显特征。\r\n\r\n雪豹敏感、机警、喜欢独行、夜间活动、远离人迹和高海拔的生活特性使其行为特征难以为人所知。到目前为止，人类对雪豹的了解仍然十分有限。\r\n\r\n因其处于高原生态食物链的顶端，雪豹亦被人们称为“高海拔生态系统健康与否的气压计”。而由于非法捕猎等多种人为因素，雪豹的数量正急剧减少，现已成为濒危物种。在中国，雪豹的数量甚至少于大熊猫。“只见雪豹皮，不见雪豹”是1990年代，美国博物学家乔治·夏勒博士的痛心呐喊。\r\n\r\n与此同时，对雪豹的一系列研究和保护工作也正在進行。2012年6月，青海三江源地区首次拍摄到雪豹影像，引发了较大关注。\r\n\r\n2017年，世界自然保護聯盟（IUCN）基於評估滅絕風險的全球標準，宣佈將大型貓科動物雪豹，從瀕危（EN）級別降級到易危（VU）級別。但仍有專家警告說，這個物種依舊面臨著非法捕獵和棲息地受破壞的嚴重威脅。	El leopardo de las nieves o irbis​ (Panthera uncia) es una especie de mamífero carnívoro de la familia Felidae propia de las montañas de Asia Central.\r\n\r\nViven en montañas remotas a altitudes de hasta 6000 m s. n. m., motivo por el cual es poco lo que se sabe de ellos. Su pelo es gris, suave y excepcionalmente denso, y tiene una cola también de longitud excepcional que enrolla alrededor del cuerpo para abrigarse.\r\n\r\nCaza de día y ataca a todo tipo de animales salvajes, así como al ganado. Son a veces matados por granjeros, pero también cazados por su piel.\r\n\r\nSe desconoce la cantidad de ejemplares que quedan en estado salvaje, aunque el Fondo Mundial para la Naturaleza estima que habrá apenas cuatro mil ejemplares.\r\n\r\nEl período de gestación es de aproximadamente cien días, teniendo normalmente dos cachorros, aunque puede tener un máximo de cinco crías. Se consideran adultos a los dos años.	نَمِرُ الثُّلُوجِ (الاسم العلمي: Panthera uncia) هو نوعٌ ضخمٌ من السنوريَّات يستوطنُ السلاسل الجبليَّة المُمتدَّة عبر آسيا الوُسطى والجنوبيَّة. تُصنَّفُ هذه الحيوانات من قِبل الاتحاد العالمي للحفاظ على الطبيعة على أنَّها مُهدَّدةٌ بالانقراض بدرجةٍ وُسطى، بعد أن أظهرت بعضُ الأبحاث التي أُجريت سنة 2003م أنَّ عدد الجُمهرة العالميَّة يتراوح بين 4,080 و6,590 سنوّرٍ بالغ، منها أقل من 2,500 فرد قادرٌ على التكاثر والإنجاب في البريَّة.تقطُنُ نُمورُ الثُلوج المناطق الجبليَّة وشبه الجبليَّة على ارتفاعاتٍ تتراوح بين 3,000 و 4,500 (بين 9,800 و14,800 قدم)، وفي موطنها الشماليّ يُمكنُ العُثور عليها على ارتفاعاتٍ أكثر انخفاضًا. وفي المناطق حيثُ تقطن الارتفاعات الشاهقة، تنحدرُ إلى الأماكن المُنخفضة التي تتوفَّر الفرائس فيها، وتشمل هذه أنواع الماعز الجبلي كالمارخور والطُهر، والقوَّاعات، والغزلان، والأيائل، وطُيورُ التًدْرُج، والمواشي المُستأنسة كالماعز والقُطاس والبغال والحُمر. وعلى نقيضِ أفرادِ فصيلتها التي تعيشُ في المناطق الاستوائيَّة، فإنَّ توالُد هذه النُمور يتمُّ في أوقاتٍ مُعيَّنةٍ من السنة، إذ تلدُ الأُنثى في شهر نيسان (أبريل) من صغيرين إلى أربعةٍ بعد حملٍ يستمرُّ ثلاثةً وتسعين يومًا كما هي الحالُ في النمر.أُطلق على هذه النُمور تسمية «Uncia uncia» العلميَّة مُنذ عقد الثلاثينيَّات من القرن العشرين، فكانت وفق هذا المُمثلة الوحيدة لِجنسها. وفي سنة 2008م اقترح بعضُ العُلماء نقلها إلى جنس النُمور (باللاتينية: Panthera) بناءً على دراساتٍ مورثيَّة تنميطيَّة اقترحت توحُدها مع سائر أعضاء الجنس سالف الذِكر. كذلك، حدَّد العُلماء نويعتين منها، لكنَّ أيُّ اختلافاتٍ مورثيَّة بينها لم تؤكَّد بعد. تتخذُ كُلًا من أفغانستان وپاكستان نمر الثُلوجِ حيوانًا وطنيًا.	La Panthère des neiges (Panthera uncia, précédemment Uncia uncia), aussi appelée Léopard des neiges, Once ou Irbis, est une espèce de félins de la sous-famille des Pantherinae. Historiquement classée dans le genre monotypique Uncia, elle fait à présent partie du genre Panthera. C'est un félin de taille moyenne avec des pattes courtes, des pieds larges et une longue queue qui représente quasiment la moitié de la longueur totale. La face, large et ronde, possède des oreilles courtes et arrondies. La robe est de couleur gris pâle à gris jaune constellée de taches pleines et de rosettes.\r\n\r\nLa Panthère des neiges chasse principalement des ongulés, notamment le Grand bharal (Pseudois nayaur), mais aussi des petits mammifères et des oiseaux. Les végétaux forment une part importante de son régime alimentaire pour un félin. Elle occupe de vastes territoires dont elle parcourt des zones restreintes durant sept à dix jours avant de se déplacer vers une autre zone. C'est l'un des rares félins à présenter un pic de naissances bien marqué, au mois de mai. Les portées, en moyenne de deux chatons, sont élevées par la mère jusqu'à environ 18 à 22 mois.\r\n\r\nLa Panthère des neiges est fortement associée aux habitats de montagnes, avec une préférence pour les ravins escarpés et rocheux. On la rencontre dans les vallées des hautes montagnes d'Asie centrale, de Sibérie centrale et de l'Altaï, jusqu'à une altitude de 5 500 m. Elle est répertoriée sur la liste rouge de l'UICN comme faisant partie des « espèces vulnérables ». La population sauvage est estimée entre 4 500 et 8 700 individus. Elle est encore braconnée pour sa fourrure ou ses os et tuée en représailles lorsqu'elle s'attaque aux animaux domestiques. Des associations de sauvegarde aident les bergers à construire des enclos protecteurs s'ils s'engagent à ne pas tuer les prédateurs.	И́рбис, или сне́жный барс, или снежный леопард (лат. Panthera uncia, ранее — лат. Uncia uncia) — крупное хищное млекопитающее семейства кошачьих, обитающее в горах Центральной Азии. Единственный современный представитель семейства, проживающий исключительно в холодном климате.\r\n\r\nИрбис отличается тонким, длинным, гибким телом, относительно короткими лапами, небольшой головой и очень длинным хвостом. Достигая вместе с хвостом длины 200—230 см, имеет массу до 55 кг. Окраска меха светлая дымчато-серая с кольцеобразными и сплошными тёмными пятнами.\r\n\r\nВ силу труднодоступности местообитания и низкой плотности вида до сих пор остаются малоисследованными многие аспекты его биологии.\r\n\r\nВ настоящее время численность ирбисов катастрофически мала — популяция вида в 2003 году по различным оценкам составляла от 4 до 7 тысяч особей, в 2020 году от 2,7 до 3,4 тысяч. В XX веке он был внесён в Красную книгу МСОП, в Красную книгу России, а также в охранные документы других стран. Охота на снежного барса запрещена во всех странах, где он обитает, снежный барс также внесён в приложение I Конвенции CITES (международный запрет на торговлю исчезающими видами животных и их частями). С 2013 года 12 странами, где обитает снежный барс, принята «Глобальная программа по сохранению снежного барса и его экосистем», предусматривающая специальные меры по его сохранению (борьба с браконьерством, создание особо охраняемых природных территорий, субсидирование фермеров в случае потери домашнего скота от снежного барса и т. д.).	\N	1	4
+4	2022-10-07 17:24:46.942673+00	2022-10-07 17:29:04.111257+00	1			The jaguar (Panthera onca) is a large cat species and the only living member of the genus Panthera native to the Americas. With a body length of up to 1.85 m (6 ft 1 in) and a weight of up to 158 kg (348 lb), it is the largest cat species in the Americas and the third largest in the world. Its distinctively marked coat features pale yellow to tan colored fur covered by spots that transition to rosettes on the sides, although a melanistic black coat appears in some individuals. The jaguar's powerful bite allows it to pierce the carapaces of turtles and tortoises, and to employ an unusual killing method: it bites directly through the skull of mammalian prey between the ears to deliver a fatal blow to the brain.\r\n\r\nThe modern jaguar's ancestors probably entered the Americas from Eurasia during the Early Pleistocene via the land bridge that once spanned the Bering Strait. Today, the jaguar's range extends from core Southwestern United States across Mexico and much of Central America, the Amazon rainforest and south to Paraguay and northern Argentina. It inhabits a variety of forested and open terrains, but its preferred habitat is tropical and subtropical moist broadleaf forest, wetlands and wooded regions. It is adept at swimming and is largely a solitary, opportunistic, stalk-and-ambush apex predator. As a keystone species, it plays an important role in stabilizing ecosystems and in regulating prey populations.\r\n\r\nThe jaguar is threatened by habitat loss, habitat fragmentation, poaching for trade with its body parts and killings in human–wildlife conflict situations, particularly with ranchers in Central and South America. It has been listed as Near Threatened on the IUCN Red List since 2002. The wild population is thought to have declined since the late 1990s. Priority areas for jaguar conservation comprise 51 Jaguar Conservation Units (JCUs), defined as large areas inhabited by at least 50 breeding jaguars. The JCUs are located in 36 geographic regions ranging from Mexico to Argentina.\r\n\r\nThe jaguar has featured prominently in the mythology of indigenous peoples of the Americas, including those of the Aztec and Maya civilizations.	美洲豹（學名：Panthera onca），又稱美洲虎，在南美也被称为斑点豹，属于猫科，也是美洲当地现存唯一一种豹属动物。美洲豹的分布，从美国西南部和墨西哥向南延伸，经过中美洲的许多地区，到达巴拉圭和阿根廷北部。尽管美国西部目前仍生活着零星的美洲豹，但自20世纪早期开始，它们中的大多数就已从美国消失。美洲豹在《自然保护联盟濒危物种红色名录》中被列为“近危物种”，其数量正在减少。面临的威胁有：栖息地的丧失和细碎化。\r\n\r\n美洲豹是美洲最大的猫科动物，体型仅次于老虎、狮子，位列第三。这种带斑点的猫科动物和花豹非常相似，但往往更大、更结实。它们栖居在各种各样的森林和开阔地带，但更偏爱热带、亚热带潮湿的阔叶林、沼泽和林地。美洲豹酷爱游泳，大多数时候喜欢独居、属于尾随伏击猎物的机会型捕食者，位于食物链顶端。作为基石物种，在稳定生态系统、控制猎物数量方面起着重要作用。\r\n\r\n美洲豹咬力异常强大，和其他大型猫科动物比也一样。这让它能洞穿爬行动物身上披的壳，并采用一种罕见的杀戮方式：直接咬穿猎物双耳间的颅骨，给脑部致命一咬。\r\n\r\n尽管围绕美洲豹及其身体部位开展的国际贸易遭到禁止，这种猫科动物仍屡遭杀害；当它们跟南美农场主及农民起冲突时更是难逃厄运。美洲豹的栖息地虽然减少了，却依然广阔。美洲豹历史上的分布状况，使得它们在由美洲当地诸多文化衍生的神话里占据突出的地位；这些文化包括：玛雅文化和阿兹特克文化。	El jaguar, yaguar o yaguareté N 1​ (Panthera onca) es un carnívoro félido de la subfamilia de los Panterinos y género Panthera. Es la única de las cinco especies actuales de este género que se encuentra en América. También es el mayor félido de América y el tercero del mundo, después del tigre (Panthera tigris) y el león (Panthera leo). Su distribución actual se extiende desde el extremo sur de Estados Unidos continuando por gran parte de México, América Central y América del Sur hasta el norte y noreste de Argentina. Habita principalmente en zonas tropicales secas y húmedas, pero también vive en matorrales áridos. Su dieta es muy amplia, puede cazar grandes presas, incluido ganado, o pequeños animales. Exceptuando algunas poblaciones en Arizona (suroeste de Tucson), esta especie ya ha sido prácticamente extirpada en los Estados Unidos desde principios de la década de 1900.N 2​\r\n\r\nSe encuentra emparentado y se asemeja mucho en apariencia física al leopardo (Panthera pardus), pero generalmente es de mayor tamaño, cuenta con una constitución más robusta y su comportamiento y hábitat son más acordes a los del tigre (Panthera tigris). Si bien prefiere las selvas densas y húmedas, puede acomodarse a una gran variedad de terrenos boscosos o abiertos. Está estrechamente asociado a la presencia de agua y destaca, junto con el tigre, por ser un félido al que le gusta nadar.\r\n\r\nEs fundamentalmente solitario. Caza tendiendo emboscadas, siendo oportunista a la hora de elegir las presas. Es una especie clave para la estabilización de los ecosistemas en los que habita; al ser un superpredador, regula las poblaciones de las especies que captura. Los ejemplares adultos tienen una mordedura excepcionalmente potente, incluso en comparación con otros grandes félidos,5​ lo que les permite perforar los caparazones de reptiles acorazados como las tortugas y utilizar un método poco habitual para matar: ataca directamente la cabeza de la presa entre las orejas para propinar un mordisco letal que atraviesa el cráneo con sus colmillos alcanzando al cerebro.6​7​\r\n\r\nPanthera onca está calificado en la Lista Roja de la UICN como «especie casi amenazada» y su número está en declive.1​ Entre los factores que lo amenazan se incluyen la pérdida y la fragmentación de su hábitat. A pesar de que el comercio internacional de ejemplares de esta especie o sus partes está prohibido,8​ este félido muere con frecuencia a mano de los humanos, especialmente en conflictos con ganaderos. Aunque reducida, su distribución geográfica continúa siendo amplia. A lo largo de la historia, esta distribución le ha otorgado un lugar prominente en la mitología de numerosas culturas indígenas americanas, como los mayas y los aztecas.	اليَغْوَر أو النمر الأمريكي، والمعروف أيضًا باسمه اللاتيني والجرماني: الجغور (نقحرة: جگور أو جاگوار)؛\r\n\r\nهو أحد السنوريات الكبرى المنتمية لجنس النمور، والممثل الوحيد لهذا الجنس في الأمريكيتين. يُعتبر اليغور ثالث أكبر السنوريات بعد الببر والأسد، وهو أضخمها في نصف الكرة الأرضية الغربي. يمتد موطن اليغور حاليًا من المكسيك عبر معظم أنحاء أمريكا الوسطى وصولاً حتى الباراغواي وشمال الأرجنتين، وكان موطنه في السابق يشمل جزءًا كبيرًا من جنوب وغرب الولايات المتحدة الأمريكية، أما الآن فقد تمت إبادته في جميع هذه الأنحاء عدا جزء صغير من ولاية أريزونا، حيث لا تزال هناك جمهرة صغيرة باقية بحسب الظاهر.\r\n\r\nيتشابه اليغور والنمر بشكل كبير في مظهرهما الخارجي، ويُمكن للمرء غير المختص أن يُخطئ بسهولة بينهما، إلا أن اليغور أكبر حجمًا وأكثر امتلاءً وأقل رشاقةً من النمر، ورقطه ورديّة الشكل تحوي نقطًا مركزية على العكس من ورديات النمر،\r\nكما أن موائله المفضلة أقرب إلى موائل الببور من النمور. يمكن العثور على اليغور في ضروب متنوعة من الموائل الطبيعية، التي تتراوح من السهول المفتوحة والسڤانا إلى الغابات، إلا أن غابات الأمطار الكثيفة تبقى مسكنه المفضل، خاصة قرب المياه، كونه أكثر السنوريات ولعًا بالنزول إلى الماء، إلى جانب الببور. يُعد اليغور حيوانًا انعزاليًا ومفترسًا انتهازيًا يصطاد عن طريق إنشاء الكمائن ما تيسّر له من الطرائد بغض النظر عن نوعها أو حجمها، وهو مفترس رئيسي وكائن عمادي في بيئته، أي أنه كائن يلعب دورًا رئيسيًا في إبقاء النظام البيئي متوازنًا في موطنه، وذلك عبر تحكمه بأعداد الطرائد المختلفة والمفترسات الدونيّة الأخرى. يُعرف عن اليغور عضته الفائقة بالمقارنة مع باقي أنواع السنوريات الكبرى، حيث يتفوق عليها جميعًا في هذا المجال، الأمر الذي يُمكنه من افتراس الزواحف ذات الجلود الأكثر قساوةً بما فيها السلاحف وبعض التمساحيات، ولليغور أسلوب قتل يُميزه عن باقي السنوريات، فهو دائمًا ما يعض رأس الطريدة بين أذنيها، ليثقب جمجمتها ودماغها مما يتسبب بنفوقها على الفور.يُصنّف الاتحاد العالمي للحفاظ على الطبيعة اليغور على أنه من ضمن الأنواع القريبة من خطر الانقراض، بما أن أعداده تتراجع بعض الشيء لأسباب عديدة منها خسارة الموائل وتجزئتها، الصيد على يد البشر، وبشكل خاص المزارعين في أمريكا الجنوبية، الذين يخسرون بضعة رؤوس من الماشية لصالح اليغور بين الحين والآخر. تحظى اليغاور بحماية قانونية دولية، حيث أنها ترد في قائمة الحيوانات التي تُحظر التجارة الدولية بها وبأعضائها وفق اتفاقية حظر الإتجار بالأنواع المهددة. يُعتبر موطن اليغور من أكبر مواطن السنوريات الكبرى على الرغم من تراجع أعداده، ونظرًا لاتساع رقعة الانتشار هذه، فقد ظهرت هذه الحيوانات في فن وميثولوجيا العديد من الشعوب الأمريكية الأصلية التي تشاطرت وإياها نفس الرقعة الجغرافية، بما فيها شعبيّ المايا والأزتيك.	Le jaguar (Panthera onca) est un mammifère carnivore de la famille des Felidae. C'est l'un des cinq « grands félins » du genre Panthera, avec le tigre, le lion, la panthère des neiges et le léopard. Son aire de répartition actuelle s'étend du Mexique à la majeure partie de l'Amérique centrale et de l'Amérique du Sud, jusqu'au nord de l'Argentine et du Paraguay. Hormis des errances occasionnelles de spécimens originaires du Mexique, le jaguar est une espèce disparue aux États-Unis depuis le début des années 1970. Il est présent à l'état sauvage en Guyane française.\r\n\r\nCe félin tacheté ressemble physiquement au léopard, mais il est généralement plus grand et d'apparence plus massive. En outre son habitat et son comportement sont plus proches de ceux du tigre. Bien que la forêt tropicale dense constitue son habitat de prédilection, le jaguar s'accommode d'une large variété de milieux ouverts et boisés. Il est fortement associé à la présence de l'eau et, comme le tigre, il aime nager. C'est un prédateur solitaire qui chasse à l'affût, tout en étant opportuniste dans la sélection des proies. C'est aussi un superprédateur qui joue un rôle important dans la stabilisation des écosystèmes et la régulation des populations qu'il chasse. Il a développé une puissance de morsure exceptionnelle, même par rapport aux autres grands félins, ce qui lui permet de percer les carapaces des reptiles et d'employer une méthode de mise à mort inhabituelle : il mord directement le crâne de sa proie et porte ainsi un coup fatal au cerveau.\r\n\r\nLe jaguar est une espèce quasi menacée (NT) selon l’Union internationale pour la conservation de la nature (UICN), et ses effectifs sont en baisse. Il est notamment menacé par la destruction de son habitat, plus ou moins liée à la fragmentation écopaysagère. Alors que le commerce international des jaguars ou de leurs dérivés est interdit, cet animal est encore régulièrement chassé par l'homme, en particulier lorsqu'il entre en conflit avec les éleveurs et les agriculteurs d’Amérique du Sud. Bien que de plus en plus réduite, son aire de répartition reste large.\r\n\r\nCompte tenu de sa répartition historique, le jaguar a figuré en bonne place dans la mythologie de nombreuses cultures amérindiennes, notamment celles des Mayas et des Aztèques.	Ягуа́р (лат. Panthera onca) — вид хищных млекопитающих семейства кошачьих, один из пяти представителей рода пантер (Panthera), который относится к подсемейству больших кошек. Единственный представитель рода на территории Северной и Южной Америки. Третий по размеру в мире, и самый крупный в Новом свете представитель семейства кошачьих[2]. Ареал вида простирается от Мексики к югу до Парагвая и северной Аргентины.\r\n\r\nДлина тела без хвоста 112—185 см, хвост 45—75 см,[3] масса 36—113 кг, в основном 60—90 кг, в отдельных случаях до 120 кг. Рекорд в природе составляет 158 кг.[3] Самка на 20 % меньше и легче. Обычный нормальный взрослый самец крупного подвида весит около 90—120 кг (в среднем около 90—95 кг), а самка 60—80 кг. Высота в холке составляет 63—76 см.\r\n\r\nВнешне ягуар очень похож на леопарда, но значительно превосходит его по размерам. Подобно тигру, он способен неплохо плавать.	\N	1	3
+22	2022-10-08 11:31:30.533276+00	2022-10-08 11:36:43.925126+00	1		en	They are so cute with tassels on their ears.	他们耳朵上挂着流苏，非常可爱。	Son tan lindos con borlas en las orejas.	هم لطيفون للغاية مع شرابات على آذانهم.	Ils sont si mignons avec des glands sur leurs oreilles.	Они такие милые с кисточками на ушах.	16	5	5
+24	2022-10-08 11:31:50.05934+00	2022-10-08 11:38:28.98547+00	1		en	They are also called the ghost of the mountains, but there are very few of them left.	他们也被称为山中的鬼魂，但剩下的已经很少了。	También se les llama el fantasma de las montañas, pero quedan muy pocos.	يُطلق عليهم أيضًا شبح الجبال ، لكن لم يبق منهم سوى عدد قليل جدًا.	On les appelle aussi le fantôme des montagnes, mais il en reste très peu.	Их также называют призраком гор, но осталось их очень мало.	17	5	4
+5	2022-10-07 17:33:45.412845+00	2022-10-07 17:35:20.092671+00	1			The cat (Felis catus) is a domestic species of small carnivorous mammal. It is the only domesticated species in the family Felidae and is commonly referred to as the domestic cat or house cat to distinguish it from the wild members of the family. A cat can either be a house cat, a farm cat, or a feral cat; the latter ranges freely and avoids human contact. Domestic cats are valued by humans for companionship and their ability to kill rodents. About 60 cat breeds are recognized by various cat registries.\r\n\r\nThe cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth, and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed. Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling, and grunting as well as cat-specific body language. A predator that is most active at dawn and dusk (crepuscular), the cat is a solitary hunter but a social species. It can hear sounds too faint or too high in frequency for human ears, such as those made by mice and other small mammals. Cats also secrete and perceive pheromones.\r\n\r\nFemale domestic cats can have kittens from spring to late autumn, with litter sizes often ranging from two to five kittens. Domestic cats are bred and shown at events as registered pedigreed cats, a hobby known as cat fancy. Population control of cats may be effected by spaying and neutering, but their proliferation and the abandonment of pets has resulted in large numbers of feral cats worldwide, contributing to the extinction of entire bird, mammal, and reptile species.\r\n\r\nIt was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.\r\n\r\nAs of 2021, there were an estimated 220 million owned and 480 million stray cats in the world. As of 2017, the domestic cat was the second most popular pet in the United States, with 95.6 million cats owned and around 42 million households own at least one cat. In the United Kingdom, 26% of adults have a cat with an estimated population of 10.9 million pet cats as of 2020.	貓（學名：Felis catus或Felis silvestris catus），通常指家貓，為中型貓科動物。根據遺傳學及考古學分析，人類養貓的紀錄可追溯至10,000年前的新月沃土地區，古埃及人飼養貓的紀錄可追溯至1000年前，以防止老鼠吃掉榖物。現在，貓成為世界上最為廣泛的寵物之一，飼養率僅次於狗，但同時也威脅着很多原生鳥類、齧齒類的生存，是世界百大外来入侵种之一。長期飼养的貓平均壽命為12年以上，歷史上最長壽的貓則達38歲。	El gato doméstico1​2​ (Felis silvestris catus), llamado más comúnmente gato, y de forma coloquial minino,3​ michino,4​ michi,5​ micho,6​ mizo,7​ miz,8​ morroño9​ o morrongo,10​ y algunos nombres más, es un mamífero carnívoro de la familia Felidae. Es una subespecie domesticada, por la convivencia con el ser humano, del gato montés.\r\n\r\nEl nombre actual en muchas lenguas proviene del latín vulgar catus. Paradójicamente, catus aludía al gatos salvajes, mientras que los gatos domésticos eran llamados felis.\r\n\r\nComo resultado de mutaciones genéticas, cruzamiento y selección artificial, hay numerosas razas. Algunas, como la raza sphynx o la peterbald están desprovistas de pelo; otras carecen de cola, como los gatos de la raza bobtail o la manx, y algunas tienen coloraciones atípicas, como los llamados gatos azules.\r\nGato acostado al revés\r\n\r\nEl gato se comunica a través de vocalizaciones. Las más populares son su característico maullido y el ronroneo, pero puede aullar, gemir, gruñir y bufar.11​ Además, adopta poses o expresiones que informan, a sus congéneres, sus enemigos o sus cuidadores, de su ánimo o sus intenciones.\r\n\r\nJunto con el perro, es el animal doméstico más popular, como mascota, como ayuda en la lucha contra roedores o ambas cosas.\r\n\r\nPor su amplio abanico de presas potenciales, por su alta eficiencia como depredador, y por su elevado éxito reproductivo —especialmente si se suministra artificialmente alimento a las colonias sin tomar medidas adicionales para limitar su fertilidad— el gato doméstico está incluido en la lista de las cien especies exóticas invasoras más dañinas del mundo12​ de la Unión Internacional para la Conservación de la Naturaleza.	القِطّ أو الهِرّ أو البَسّ (الاسم العلمي: Felis catus) هو نوع من أنواع الثدييات آكلات اللحوم، وهو الحيوان الوحيد المستأنس من فصيلة السنوريات، وغالبا ما يشار إليه باسم القط المنزلي لتمييزه عن باقي أفراد عائلته من القطط البرية. يمكن أن تكون القطط إما قطط منزلية أو قطط مزارع أو قطط برية، والفئة الأخيرة تتجول بحرية وتتجنب التواصل مع البشر. يحبذ البشر رفقة القطط المنزلية نظرا لقدرتها على اصطياد القوارض. تم تحديد حوالي 60 سلالة قطط من خلال سجلات القطط المختلفة.تتشابه القطط في علم التشريح مع الأنواع الأخرى من السنوريات، فهي تمتلك جسما مرنا قويا، وردود فعل سريعة، وأسنانا حادة ومخالب قابلة للسحب تتكيف مع قتل الفرائس الصغيرة، وتمتلك القدرة على الرؤية الليلية كما لديها حاسة شم متطورة بشكل جيد. تتواصل القطط من خلال إصدار أصواتا مثل المواء والخرخرة والتكرير والهسهسة والهدير والشخير، بالإضافة إلى لغة الجسد الخاصة بالقط. القط صياد انفرادي على الرغم من نزعته الاجتماعية. يمكن للقطط أن تسمع أصواتا خافتة جدا أو عالية التردد جدا لآذان الإنسان، مثل تلك الأصوات التي تصدرها الفئران والثدييات الصغيرة الأخرى. القط حيوان مفترس يزداد نشاطه عند الفجر والغسق. يقوم القط بإفراز الفيرومونات كما بإمكانه تمييزها.\r\nقطة تُرضع قطيطاتها\r\n\r\nيمكن أن تلد إناث القطط المنزلية قططا صغيرة من فصل الربيع إلى أواخر الخريف، وغالبا ما يتراوح العدد الناتج من البطن الواحد من 2 إلى 5 قطيطات.\r\nيتم تربية القطط المنزلية واستعراضها في المناسبات على أنها قطط أصيلة مسجلة، وهي هواية تُعرف باسم ثقافة محبي القطط. من العوامل التي أدت إلى ظهور أعداد كبيرة من القطط البرية في جميع أنحاء العالم: الفشل بالتحكم في تكاثر القطط الأليفة عن طريق التعقيم والإخصاء، وكذلك التخلي عن الحيوانات الأليفة من قبل أصحابها، الأمر الذي ساهم في انقراض أنواع كاملة من الطيور والثدييات والزواحف، وبالتالي إثارة موضوع التحكم في أعداد الحيوانات.\r\nتمثال لقط مصري مصنوع من البرونز وأوراق الذهب، ويعود إلى 945-712 سنة قبل الميلاد، تم تصويره في متحف الآثار والأنثروبولوجيا في جامعة بنسيلفانيا، الولايات المتحدة الأمريكية\r\n\r\nبدأ استئناس القطط في الشرق الأدنى منذ نحو 7500 سنة قبل الميلاد،\r\nومن المعتقد أن تكون حضارة مصر القديمة هي منشأ استئناس القطط، حيث تم تكريم القطط في مصر القديمة منذ حوالي 3100 سنة قبل الميلاد. كما في 2017، كان القط المنزلي هو ثاني أكثر الحيوانات الأليفة شعبية في الولايات المتحدة بعدد 95 مليون قط. ويُقدر عدد القطط المنزلية في المملكة المتحدة بحوالي 7.3 مليون من القطط لدى أكثر من 4.8 مليون أسرة كما في 2019.	Le Chat domestique (Felis silvestris catus) est la sous-espèce issue de la domestication du Chat sauvage (Felis silvestris), mammifère carnivore de la famille des Félidés.\r\n\r\nIl est l’un des principaux animaux de compagnie et compte aujourd’hui une cinquantaine de races différentes reconnues par les instances de certification. Dans de très nombreux pays, le chat entre dans le cadre de la législation sur les carnivores domestiques à l’instar du chien et du furet. Essentiellement territorial, le chat est un prédateur de petites proies comme les rongeurs ou les oiseaux. Les chats ont diverses vocalisations dont les ronronnements, les miaulements, les feulements ou les grognements, bien qu’ils communiquent principalement par des positions faciales et corporelles et des phéromones.\r\n\r\nSelon les résultats de travaux menés en 2006 et 20071, le chat domestique est une sous-espèce du chat sauvage issue d’ancêtres appartenant à la sous-espèce du chat sauvage d’Afrique (Felis silvestris lybica). Les premières domestications auraient eu lieu il y a 8 000 à 10 000 ans au Néolithique dans le Croissant fertile, époque correspondant au début de la culture de céréales et à l’engrangement de réserves susceptibles d’être attaquées par des rongeurs, le chat devenant alors pour l’Homme un auxiliaire utile se prêtant à la domestication.\r\n\r\nTout d’abord vénéré par les Égyptiens, il fut diabolisé en Europe au Moyen Âge et ne retrouva ses lettres de noblesse qu’au XVIIIe siècle. En Asie, le chat reste synonyme de chance, de richesse ou de longévité. Ce félin a laissé son empreinte dans la culture populaire et artistique, tant au travers d’expressions populaires que de représentations diverses au sein de la littérature, de la peinture ou encore de la musique.	Ко́шка (лат. Felis catus) — домашнее животное, одно из наиболее популярных (наряду с собакой) «животных-компаньонов».\r\n\r\nС точки зрения научной систематики, домашняя кошка — млекопитающее семейства кошачьих отряда хищных. Нередко домашнюю кошку рассматривают как подвид лесной кошки (Felis silvestris) — Felis s. catus, однако, с точки зрения современной биологической систематики (2017 год), домашняя кошка является отдельным биологическим видом.\r\n\r\nЯвляясь одиночным охотником на грызунов и других мелких животных, кошка — социальное животное, использующее для общения широкий диапазон звуковых сигналов, а также феромоны и движения тела.\r\n\r\nВ настоящее время в мире насчитывается около 600 млн домашних кошек, выведено около 200 пород, от длинношёрстных (персидская кошка) до лишённых шерсти (сфинксы), признанных и зарегистрированных различными фелинологическими организациями.\r\n\r\nНа протяжении 10 000 лет кошки ценятся человеком, в том числе за способность охотиться на грызунов и других домашних вредителей.	\N	1	2
+6	2022-10-07 18:10:46.84432+00	2022-10-07 18:12:41.805901+00	1			Felidae (/ˈfɛlɪdiː/) is a family of mammals in the order Carnivora, colloquially referred to as cats, and constitutes a clade. A member of this family is also called a felid (/ˈfiːlɪd/). The term "cat" refers both to felids in general and specifically to the domestic cat (Felis catus).\r\n\r\nFelidae species exhibit the most diverse fur pattern of all terrestrial carnivores. Cats have retractile claws, slender muscular bodies and strong flexible forelimbs. Their teeth and facial muscles allow for a powerful bite. They are all obligate carnivores, and most are solitary predators ambushing or stalking their prey. Wild cats occur in Africa, Europe, Asia and the Americas. Some wild cat species are adapted to forest habitats, some to arid environments, and a few also to wetlands and mountainous terrain. Their activity patterns range from nocturnal and crepuscular to diurnal, depending on their preferred prey species.\r\n\r\nReginald Innes Pocock divided the extant Felidae into three subfamilies: the Pantherinae, the Felinae and the Acinonychinae, differing from each other by the ossification of the hyoid apparatus and by the cutaneous sheaths which protect their claws. This concept has been revised following developments in molecular biology and techniques for analysis of morphological data. Today, the living Felidae are divided in two subfamilies: the Pantherinae and Felinae, with the Acinonychinae subsumed into the latter. Pantherinae includes five Panthera and two Neofelis species, while Felinae includes the other 34 species in ten genera.\r\n\r\nThe first cats emerged during the Oligocene about 25 million years ago, with the appearance of Proailurus and Pseudaelurus. The latter species complex was ancestral to two main lines of felids: the cats in the extant subfamilies and a group of extinct cats of the subfamily Machairodontinae, which include the saber-toothed cats such as the Smilodon. The "false sabre-toothed cats", the Barbourofelidae and Nimravidae, are not true cats, but are closely related. Together with the Felidae, Viverridae, hyaenas and mongooses, they constitute the Feliformia.	猫科包括狮子、老虎和豹等动物，是食肉目的9个科中最具肉食性的哺乳动物。第一种的猫科动物出现于渐新世，人们更熟悉的家猫和人类在一万年前开始有关连。家猫的野生种亲戚野猫，仍然生存在欧洲、非洲和亚洲东部等地，虽然栖地破坏限制了其居住的范围。\r\n\r\n其他猫科动物中知名的成员有包括如狮子、老虎、豹和美洲豹等大猫，以及其他如美洲狮、猎豹、猞猁、狞猫和短尾猫等猫亚科动物。已灭绝的剑齿虎亚科为真的猫科动物，而其他如袋剑齿虎和猎猫等相似的动物则不是。	Los félidos o comúnmente llamados felinos (Felidae) son una familia de mamíferos placentarios del orden Carnivora. Poseen un cuerpo esbelto, oído agudo, hocico corto y excelente vista. Son los mamíferos cazadores más sigilosos. La mayoría consume exclusivamente carne e ignora cualquier otra comida que no sea una presa viva. La capturan con sus afiladas garras y suelen matarla de un único y tenaz mordisco.\r\n\r\nA excepción de los guepardos, todos los félidos pueden retraer las uñas de sus garras dentro de una vaina protectora mientras no las usan.\r\n\r\nHay alrededor de cuarenta especies en esta familia; muchas de las cuales escasean en la actualidad, porque han sido objeto de caza por su piel, para aprovechar partes de su cuerpo, o porque su hábitat está siendo destruido, como pasa con el lince ibérico (Lynx pardinus), el félido en mayor peligro de extinción.\r\n\r\nExcepto en Antártida, Oceanía y algunas islas, se los encuentra en todo el mundo.	السِّنَّوْرِيَّات (بالإنجليزية: Felidae)‏ أو الهِرِّيَّات أو القططيات فصيلةٌ من الحيوانات الثَّدْيِيَّة التي تضم كَثِيرًا من الأنواع مثل الأُسُود، و البُبُور، و النُّمُور، و الفُهُود، و القطط الأليفة والبرية، وأنواع عديدة أخرى.	Les Félidés (Felidae) ou Félins sont une famille de mammifères placentaires de l'ordre des carnivores et du sous-ordre des féliformes. Si on exclut le taxon fossile des Proailurinae, qui ne possède qu'un seul et unique genre connu, on y distingue trois sous-familles : les « petits félins » (Felinae), les « grands félins » (Pantherinae) et les félins dit « à dents de sabre » (Machairodontinae), aujourd'hui éteints. Parmi leurs traits caractéristiques figurent leur tête ronde au crâne raccourci, leur mâchoire dotée d’environ trente dents, et leurs griffes rétractiles, exception faite du chat viverrin et du chat à tête plate (semi-rétractiles) et du guépard (non rétractiles). Les félins sont digitigrades, c’est-à-dire qu’ils marchent en appuyant sur leurs doigts (la plante du pied ne se pose pas sur le sol).\r\n\r\nProailurus, qui vivait en Eurasie il y a environ 25 millions d’années dans la période de l’Oligocène, est à l'heure actuelle considéré comme le plus vieux fossile de félidé. On considère Pseudaelurus comme le dernier ancêtre commun des félins modernes.	Коша́чьи, или ко́шки, или фели́ды (лат. Felidae), — семейство млекопитающих отряда хищных. Наиболее специализированные из хищников, приспособленные к добыванию животной пищи путём подкрадывания, подкарауливания, реже — преследования.	\N	1	1
+7	2022-10-07 18:59:07.981801+00	2022-10-07 19:02:00.482185+00	1		ru	It's great that there are such animals.	有这样的动物真是太好了。	Es genial que haya animales así.	إنه لأمر رائع أن توجد مثل هذه الحيوانات.	C'est super qu'il y ait de tels animaux.	Как же здорово, что есть такие животные	6	3	1
+12	2022-10-07 19:01:10.153795+00	2022-10-07 19:02:53.964588+00	1		ru	It's great that there are such animals.	有这样的动物真是太好了。	Es genial que haya animales así.	إنه لأمر رائع أن توجد مثل هذه الحيوانات.	C'est super qu'il y ait de tels animaux.	Как же здорово, что есть такие животные.	1	3	6
+11	2022-10-07 19:00:43.086476+00	2022-10-07 19:03:36.773182+00	1		ru	They are very important	它们非常重要	Son muy importantes	هم مهمون جدا	Ils sont très importants	Они очень важны	2	3	5
+10	2022-10-07 19:00:12.94442+00	2022-10-07 19:04:39.765276+00	1		ru	Magical beauty	神奇的美丽	Belleza mágica	الجمال السحري	Beauté magique	Волшебная красота	3	3	4
+9	2022-10-07 18:59:53.850675+00	2022-10-07 19:05:13.698887+00	1		ru	I like it	我喜欢	Me gusta	أحبها	Je l'aime bien	Мне это нравится	4	3	3
+8	2022-10-07 18:59:38.483265+00	2022-10-07 19:06:07.044894+00	1		ru	And I have a cat	我有一只猫	y tengo un gato	ولدي قطة	Et j'ai un chat	И у меня есть кошка	5	3	2
+18	2022-10-07 19:08:33.624563+00	2022-10-07 19:09:12.901087+00	1		en	They are very important	它们非常重要	Son muy importantes	هم مهمون جدا	Ils sont très importants	Они очень важны	9	4	3
+17	2022-10-07 19:08:22.324847+00	2022-10-07 19:09:42.770512+00	1		en	They are very important	它们非常重要	Son muy importantes	هم مهمون جدا	Ils sont très importants	Они очень важны	10	4	4
+13	2022-10-07 19:07:34.146129+00	2022-10-07 19:13:13.352924+00	1		en	I like it	我喜欢	Me gusta	أحبها	Je l'aime bien	Мне это нравится	8	4	2
+16	2022-10-07 19:08:12.242137+00	2022-10-07 19:11:20.335489+00	1		en	It's great that there are such animals.	有这样的动物真是太好了。	Es genial que haya animales así.	إنه لأمر رائع أن توجد مثل هذه الحيوانات.	C'est super qu'il y ait de tels animaux.	Как же здорово, что есть такие животные	11	4	5
+15	2022-10-07 19:07:59.745208+00	2022-10-07 19:12:02.575122+00	1		en	magical beauty	神奇的美丽	Belleza mágica	الجمال السحري	Beauté magique	Волшебная красота	12	4	6
+14	2022-10-07 19:07:51.350923+00	2022-10-07 19:12:49.538628+00	1		en	magical beauty	神奇的美丽	Belleza mágica	الجمال السحري	Beauté magique	Волшебная красота	7	4	1
+19	2022-10-08 11:30:55.783828+00	2022-10-08 11:32:45.283284+00	1		en	Cats warm both body and soul.	猫温暖了身体和灵魂。	Los gatos calientan tanto el cuerpo como el alma.	القطط تدفئ الجسد والروح.	Les chats réchauffent le corps et l'esprit.	Кошки согревают и тело и душу.	13	5	2
+20	2022-10-08 11:31:11.718667+00	2022-10-08 11:33:37.664174+00	1		en	They are so different and so magically beautiful.	他们是如此不同，如此神奇美丽。	Son tan diferentes y tan mágicamente hermosos.	إنهم مختلفون جدًا وجميلون جدًا.	Ils sont si différents et si magiquement beaux.	Они такие разные и такие волшебно красивые.	14	5	1
+21	2022-10-08 11:31:19.836148+00	2022-10-08 11:36:00.035564+00	1		en	A cat that loves to swim.	一只爱游泳的猫。	Un gato al que le encanta nadar.	قطة تحب السباحة.	Un chat qui aime nager.	Кошка, которая любит плавать.	18	5	3
+23	2022-10-08 11:31:38.153859+00	2022-10-08 11:37:20.8906+00	1		en	Running champions.	跑步冠军。	Correr campeones.	أبطال الجري.	Champions de course.	Чемпионы по бегу.	15	5	6
+\.
+
+
+--
+-- Data for Name: opinion_attachment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.opinion_attachment (id, document, original_label, md5, size, deleted, opinion_id) FROM stdin;
+1	2022-10-06/2_cheetahs_at_field_during_daytime_photo.jpg	2 cheetahs at field during daytime photo.jpg	341329e4c83caf9db5857fd076a00d97	165453	f	1
+2	2022-10-07/brown_and_black_leopard_walking_on_snow_covered_ground_during_daytime_photo.jpg	brown and black leopard walking on snow covered ground during daytime photo.jpg	131a3f82e0d0addf5058916c4b6dce12	175078	f	2
+3	2022-10-07/Euroasian_lynx_in_the_bavarian_national_park_in_eastern_germany.jpg	Euroasian lynx in the bavarian national park in eastern germany.jpg	93fc476d6a8e3c343947939a1eb317c1	82117	f	2
+4	2022-10-07/gray_cat_on_snow_covered_ground_photo.jpg	gray cat on snow covered ground photo.jpg	48b4f5812c34f7145f31cc1606c6d03b	29611	f	2
+5	2022-10-07/short-fur_gray_and_black_cat_photo.jpg	short-fur gray and black cat photo.jpg	0a9aa0aefe83eabae7037cce90a98ae0	132386	f	2
+6	2022-10-07/shallow_focus_photo_of_snow_leopard_photo.jpg	shallow focus photo of snow leopard photo.jpg	0a3128230dee6bc6c2da9b362bd6b85a	118713	f	3
+7	2022-10-07/snow-leopard-irbis-panthera-uncia_641010-3410.jpg	snow-leopard-irbis-panthera-uncia_641010-3410.jpg	c3953a6033690409103e947bfa4e89b3	92489	f	3
+8	2022-10-07/snow-leopard-portrait-amazing-light-wild-animal-nature-habitat-very-rare-uniq_yS5y6a4.jpg	snow-leopard-portrait-amazing-light-wild-animal-nature-habitat-very-rare-unique-wild-cat-irbis-panthera-uncia-uncia-uncia.jpg	12aff3a81e71c6d590396d9335171c66	114643	f	3
+9	2022-10-07/Snow_leopard_portrait_in_amazing_light_wild_animal_in_the_nature_habitat_very_FvLeMH4.jpg	Snow leopard portrait in amazing light wild animal in the nature habitat very rare and unique wild cat irbis panthera uncia uncia uncia.jpg	0390c3a2ab4fc4c67f77410d87069cbc	85879	f	3
+10	2022-10-07/American_jaguar_in_the_nature_habitat_of_south_american_jungle.jpg	American jaguar in the nature habitat of south american jungle.jpg	b54b3e29c2ff08c52f2aa9e3eac78947	870453	f	4
+11	2022-10-07/Collage_of_Six_Cats-02.jpeg	Collage_of_Six_Cats-02.jpeg	41eb27797c4b4aeff4488d0555e4e435	114184	f	5
+12	2022-10-07/The_Felidae.jpg	The_Felidae.jpg	2fbda0b85b7900e6ede5f68fe2dcc098	152885	f	6
+\.
+
+
+--
+-- Data for Name: participant; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.participant (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, username, name, email, time_zone, l1, l2, about) FROM stdin;
+3	pbkdf2_sha256$260000$wbl2T0tllctuVhkAYS1eWI$KF0KOC6McXEY7fN5UmNuyLsxc8VwL04URrXvQt5K3/o=	2022-10-08 11:40:29.769099+00	f			f	t	2022-10-06 16:45:20.871032+00	user1	User1	user1@mail.yolla	Asia/Shanghai	en	zh-hans	我是个好人...
+5	pbkdf2_sha256$260000$wbl2T0tllctuVhkAYS1eWI$KF0KOC6McXEY7fN5UmNuyLsxc8VwL04URrXvQt5K3/o=	2022-10-08 11:41:23.461485+00	f			f	t	2022-10-06 16:49:57.172264+00	user3	User3	user3@mail.yolla	Europe/Paris	en	fr	
+4	pbkdf2_sha256$260000$wbl2T0tllctuVhkAYS1eWI$KF0KOC6McXEY7fN5UmNuyLsxc8VwL04URrXvQt5K3/o=	2022-10-08 11:40:57.55849+00	f			f	t	2022-10-06 16:49:26.416096+00	user2	User2	user2@mail.yolla	Europe/Moscow	en	ru	Я хороший человек...
+1	pbkdf2_sha256$260000$wbl2T0tllctuVhkAYS1eWI$KF0KOC6McXEY7fN5UmNuyLsxc8VwL04URrXvQt5K3/o=	2022-10-07 18:14:08.022572+00	t			t	t	2022-10-04 19:19:30.230683+00	admin	Admin	admin@mail.yolla	UTC	en		
+2	pbkdf2_sha256$260000$wbl2T0tllctuVhkAYS1eWI$KF0KOC6McXEY7fN5UmNuyLsxc8VwL04URrXvQt5K3/o=	2022-10-08 11:32:03.008211+00	f			t	t	2022-10-06 16:43:33.86186+00	staff	Staff	staff@mail.yolla	Europe/Moscow	en	ru	I am a good man...
+\.
+
+
+--
+-- Data for Name: participant_groups; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.participant_groups (id, participant_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: participant_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.participant_user_permissions (id, participant_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: topic; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.topic (id, created, updated, slug, published, en_name, zh_hans_name, es_name, ar_name, fr_name, ru_name, en_description, zh_hans_description, es_description, ar_description, fr_description, ru_description, category_id) FROM stdin;
+5	2022-10-04 21:33:36.17172+00	2022-10-08 11:36:43.917547+00	lynx	t	Lynx	猞猁	Lince	وشق	Lynx	Рысь	A lynx is any of the four species within the medium-sized wild cat genus Lynx.	猞猁是中型野猫属猞猁的四种中的任何一种。	Un lince es cualquiera de las cuatro especies dentro del género Lynx de gatos salvajes de tamaño mediano.	الوشق هو أي من الأنواع الأربعة داخل جنس القطط البرية متوسطة الحجم Lynx.	Un lynx est l'une des quatre espèces du genre de chat sauvage de taille moyenne Lynx.	Рысь — это любой из четырех видов диких кошек среднего размера рода Lynx.	4
+4	2022-10-04 21:31:53.71882+00	2022-10-08 11:38:28.970856+00	snow-leopard	t	Snow leopard	雪豹	Leopardo de nieve	نمر الثلج	Léopard des neiges	Снежный барс	The snow leopard, also known as the ounce, is a felid in the genus Panthera native to the mountain ranges of Central and South Asia.	雪豹，也称为盎司，是豹属的猫科动物，原产于中亚和南亚山脉。	El leopardo de las nieves, también conocido como la onza, es un felino del género Panthera nativo de las cadenas montañosas del centro y sur de Asia.	نمر الثلج ، المعروف أيضًا باسم الأوقية ، هو سنيور من جنس Panthera موطنه سلاسل الجبال في وسط وجنوب آسيا.	Le léopard des neiges, également connu sous le nom d'once, est un félin du genre Panthera originaire des chaînes de montagnes d'Asie centrale et du Sud.	Снежный барс, также известный как ирбис, — представитель семейства кошачьих рода Panthera, обитающий в горных хребтах Центральной и Южной Азии.	4
+7	2022-10-04 21:37:19.662646+00	2022-10-04 21:37:19.662669+00	all-fruits	t	All fruits	所有水果	Todas las frutas	جميع الفواكه	Tous les fruits	Все фрукты	In botany, a fruit is the seed-bearing structure in flowering plants that is formed from the ovary after flowering.	在植物学中，果实是开花植物中的含种子结构，在开花后由子房形成。	En botánica, una fruta es la estructura portadora de semillas en las plantas con flores que se forma a partir del ovario después de la floración.	في علم النبات ، الفاكهة هي البنية الحاملة للبذور في النباتات المزهرة التي تتشكل من المبيض بعد الإزهار.	En botanique, un fruit est la structure porte-graines des plantes à fleurs qui se forme à partir de l'ovaire après la floraison.	В ботанике плод — это семенная структура у цветковых растений, образующаяся из завязи после цветения.	5
+8	2022-10-04 21:38:27.555414+00	2022-10-04 21:38:27.555455+00	tangerines	t	Tangerines	橘子	Mandarinas	اليوسفي	Mandarines	Мандарины	The tangerine is a type of citrus fruit that is orange in color.	橘子是一种橙色的柑橘类水果。	La mandarina es un tipo de fruta cítrica de color naranja.	اليوسفي هو نوع من الفاكهة الحمضية ذات لون برتقالي.	La mandarine est un type d'agrume de couleur orange.	Мандарин — это цитрусовый фрукт оранжевого цвета.	5
+9	2022-10-04 21:40:32.038288+00	2022-10-04 21:40:32.038312+00	apples	t	Apples	苹果	Manzanas	تفاح	Pommes	Яблоки	An apple is an edible fruit produced by an apple tree. Apple trees are cultivated worldwide and are the most widely grown species in the genus Malus.	苹果是由苹果树生产的可食用水果。苹果树在世界范围内种植，是苹果属中种植最广泛的树种。	Una manzana es una fruta comestible producida por un manzano. Los manzanos se cultivan en todo el mundo y son las especies más cultivadas del género Malus.	التفاحة هي فاكهة صالحة للأكل تنتجها شجرة تفاح. تُزرع أشجار التفاح في جميع أنحاء العالم وهي أكثر الأنواع نموًا على نطاق واسع في جنس Malus.	Une pomme est un fruit comestible produit par un pommier. Les pommiers sont cultivés dans le monde entier et sont les espèces les plus cultivées du genre Malus.	Яблоко — это съедобный плод, который произрастает на яблоне. Яблони выращивают во всем мире и являются наиболее широко выращиваемыми видами рода Malus.	5
+10	2022-10-04 21:42:15.18534+00	2022-10-04 21:42:15.185381+00	watermelons	t	Watermelons	西瓜	Sandías	بطيخ	Pastèques	Арбузы	Watermelon is a flowering plant species of the Cucurbitaceae family and the name of its edible fruit.	西瓜是葫芦科的一种开花植物，是其可食用果实的名称。	La sandía es una especie de planta con flores de la familia Cucurbitaceae y el nombre de su fruto comestible.	البطيخ هو نوع من النباتات المزهرة من عائلة القرعيات واسم ثمارها الصالحة للأكل.	La pastèque est une espèce de plante à fleurs de la famille des cucurbitacées et le nom de son fruit comestible.	Арбуз — вид цветущего растения семейства тыквенных и название его съедобных плодов.	5
+11	2022-10-04 21:44:12.678748+00	2022-10-04 21:44:12.678779+00	lemons	t	Lemons	柠檬	Limones	ليمون	Citrons	Лимоны	The lemon is a species of small evergreen trees in the flowering plant family Rutaceae, native to Asia, primarily Northeast India, Northern Myanmar or China.	柠檬是芸香科开花植物中的一种小型常绿乔木，原产于亚洲，主要是印度东北部、缅甸北部或中国。	El limón es una especie de pequeños árboles de hoja perenne de la familia de plantas con flores Rutaceae, nativo de Asia, principalmente el noreste de la India, el norte de Myanmar o China.	الليمون هو نوع من الأشجار الصغيرة دائمة الخضرة في عائلة النباتات المزهرة Rutaceae ، موطنها آسيا ، في المقام الأول شمال شرق الهند ، شمال ميانمار أو الصين.	Le citron est une espèce de petits arbres à feuilles persistantes de la famille des plantes à fleurs Rutaceae, originaire d'Asie, principalement du nord-est de l'Inde, du nord du Myanmar ou de la Chine.	Лимон - это вид небольших вечнозеленых деревьев семейства цветковых растений Rutaceae, произрастающих в Азии, в основном в Северо-Восточной Индии, Северной Мьянме или Китае.	5
+12	2022-10-04 21:46:11.303418+00	2022-10-04 21:46:11.303443+00	banana	t	Banana	香蕉	Banana	موز	Banane	Банан	A banana is an elongated, edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa.	香蕉是一种细长的可食用水果——植物学上是浆果——由穆萨属的几种大型草本开花植物生产。	Un plátano es una fruta alargada y comestible, botánicamente una baya, producida por varios tipos de plantas herbáceas grandes con flores del género Musa.	الموز هو فاكهة مستطيلة صالحة للأكل - نباتية توت - تنتجها عدة أنواع من النباتات المزهرة العشبية الكبيرة في جنس موسى.	Une banane est un fruit allongé et comestible - botaniquement une baie - produit par plusieurs types de grandes plantes à fleurs herbacées du genre Musa.	Банан — это продолговатый съедобный фрукт — с ботанической точки зрения — ягода, производимый несколькими видами крупных травянистых цветковых растений рода Musa.	5
+13	2022-10-04 21:48:47.454638+00	2022-10-04 21:48:47.454676+00	birch	t	Birch	桦木	Abedul	البتولا	Bouleau	Береза	A birch is a thin-leaved deciduous hardwood tree of the genus Betula, in the family Betulaceae, which also includes alders, hazels, and hornbeams.	桦树是桦木科桦木属的一种薄叶落叶阔叶树，还包括桤木、榛树和角树。	Un abedul es un árbol de hoja caduca de madera dura del género Betula, en la familia Betulaceae, que también incluye alisos, avellanos y carpes.	البتولا عبارة عن شجرة صلبة نفضية رقيقة الأوراق من جنس Betula ، في عائلة Betulaceae ، والتي تشمل أيضًا نباتات الآلدر والبندق وعوارض البوق.	Un bouleau est un feuillu à feuilles minces du genre Betula, de la famille des Betulaceae, qui comprend également les aulnes, les noisetiers et les charmes.	Береза — это тонколиственное листопадное лиственное дерево из рода Betula, семейства Betulaceae, в которое также входят ольха, лещина и грабы.	6
+14	2022-10-04 21:50:04.696166+00	2022-10-04 21:50:04.69619+00	elm	t	Elm	榆树	Olmo	الدردار	Orme	Вяз	Elms are deciduous and semi-deciduous trees comprising the flowering plant genus Ulmus in the plant family Ulmaceae.	榆树是落叶和半落叶乔木，包括榆科植物榆属的开花植物榆属。	Los olmos son árboles de hoja caduca y semideciduos que comprenden el género de plantas con flores Ulmus en la familia de plantas Ulmaceae.	الدردار عبارة عن أشجار نفضية وشبه نفضية تتكون من جنس النبات المزهر Ulmus في عائلة نبات Ulmaceae.	Les ormes sont des arbres à feuilles caduques et semi-caduques comprenant le genre de plantes à fleurs Ulmus dans la famille des plantes Ulmaceae.	Вязы - это лиственные и полулиственные деревья, входящие в род цветковых растений Ulmus семейства растений Ulmaceae.	6
+15	2022-10-04 21:51:32.269145+00	2022-10-04 21:51:32.269188+00	chestnut	t	Chestnut	板栗	Castaña	كستناء	Châtaigne	Каштан	True chestnuts are deciduous trees and shrubs in the genus Castanea, in the beech family Fagaceae.	真正的栗子是山毛榉科山毛榉科栗属的落叶乔木和灌木。	Los castaños verdaderos son árboles y arbustos de hoja caduca del género Castanea, en la familia de las hayas Fagaceae.	الكستناء الحقيقية هي أشجار وشجيرات متساقطة الأوراق من جنس Castanea ، في عائلة الزان Fagaceae.	Les vrais châtaigniers sont des arbres et des arbustes à feuilles caduques du genre Castanea, de la famille des hêtres Fagacées.	Настоящие каштаны — лиственные деревья и кустарники рода Castanea семейства буковых Fagaceae.	6
+16	2022-10-04 21:52:46.990695+00	2022-10-04 21:52:46.990718+00	pine	t	Pine	松树	Pino	صنوبر	Pin	Сосна	A pine is any conifer tree or shrub in the genus Pinus of the family Pinaceae. Pinus is the sole genus in the subfamily Pinoideae.	松树是松科松属的任何针叶树或灌木。松属是松属亚科的唯一属。	Un pino es cualquier árbol o arbusto conífero del género Pinus de la familia Pinaceae. Pinus es el único género de la subfamilia Pinoideae.	الصنوبر هو أي شجرة صنوبرية أو شجيرة في جنس الصنوبر من عائلة الصنوبر. الصنوبر هو الجنس الوحيد في الفصيلة الفرعية Pinoideae.	Un pin est un conifère ou un arbuste du genre Pinus de la famille des Pinaceae. Pinus est le seul genre de la sous-famille Pinoideae.	Сосна — это любое хвойное дерево или кустарник из рода Pinus семейства Pinaceae. Pinus — единственный род в подсемействе Pinoideae.	6
+2	2022-10-04 21:29:30.600566+00	2022-10-08 11:32:45.280077+00	cat	t	Cat	猫	Gato	قطة	Chat	Кошка	The cat is a domestic species of small carnivorous mammal. It is the only domesticated species in the family Felidae and is commonly referred to as the domestic cat or house cat to distinguish it from the wild members of the family.	猫是一种家养的小型肉食哺乳动物。它是猫科中唯一被驯化的物种，通常被称为家猫或家猫，以区别于该科的野生成员。	El gato es una especie doméstica de pequeño mamífero carnívoro. Es la única especie domesticada de la familia Felidae y se le conoce comúnmente como gato doméstico o gato doméstico para distinguirlo de los miembros salvajes de la familia.	القط هو نوع محلي من الثدييات آكلة اللحوم الصغيرة. هو النوع الوحيد المستأنس في عائلة Felidae ويشار إليه عادة بالقطط المنزلية أو قطة المنزل لتمييزه عن أفراد الأسرة البرية.	Le chat est une espèce domestique de petit mammifère carnivore. C'est la seule espèce domestiquée de la famille des félidés et est communément appelée chat domestique ou chat domestique pour le distinguer des membres sauvages de la famille.	Кошка — домашний вид мелкого хищного млекопитающего. Это единственный одомашненный вид в семействе кошачьих, и его обычно называют домашней кошкой или домашней кошкой, чтобы отличить ее от диких представителей семейства.	4
+3	2022-10-04 21:30:37.259475+00	2022-10-08 11:36:00.018528+00	jaguar	t	Jaguar	捷豹	Jaguar	جاكوار	Jaguar	Ягуар	The jaguar (Panthera onca) is a large cat species and the only living member of the genus Panthera native to the Americas.	美洲虎 (Panthera onca) 是一种大型猫科动物，也是美洲豹属中唯一活着的成员。	El jaguar (Panthera onca) es una especie de gato grande y el único miembro vivo del género Panthera nativo de las Américas.	جاكوار (Panthera onca) هو نوع من القطط الكبيرة والعضو الحي الوحيد من جنس Panthera الأصلي في الأمريكتين.	Le jaguar (Panthera onca) est une grande espèce de chat et le seul membre vivant du genre Panthera originaire des Amériques.	Ягуар (Panthera onca) — крупный вид кошек и единственный живой представитель рода Panthera, обитающий в Америке.	4
+1	2022-10-04 21:25:21.817024+00	2022-10-08 11:33:37.64791+00	felidae	t	Felidae	猫科	Félidos	سنوريات	Félidés	Кошачьи	Felidae is a family of mammals in the order Carnivora, colloquially referred to as cats, and constitutes a clade. A member of this family is also called a felid.	猫科是食肉目哺乳动物的一个家族，俗称猫科，并构成一个进化枝。这个家庭的成员也被称为猫科动物。	Felidae es una familia de mamíferos del orden Carnivora, coloquialmente denominados gatos, y constituye un clado. Un miembro de esta familia también se llama felino.	السِّنَّوْرِيَّات (بالإنجليزية: Felidae)‏ أو الهِرِّيَّات أو القططيات فصيلةٌ من الحيوانات الثَّدْيِيَّة التي تضم كَثِيرًا من الأنواع مثل الأُسُود، و البُبُور، و النُّمُور، و الفُهُود، و القطط الأليفة والبرية، وأنواع عديدة أخرى.	Les félidés sont une famille de mammifères de l'ordre des carnivores, familièrement appelés chats, et constituent un clade. Un membre de cette famille est aussi appelé un félidé.	Кошачьи — семейство млекопитающих отряда Carnivora, в просторечии называемое кошками, образующее кладу. Члена этого семейства также называют кошачьим.	4
+6	2022-10-04 21:35:25.706341+00	2022-10-08 11:37:20.886566+00	cheetah	t	Cheetah	猎豹	Guepardo	الفهد	Guépard	Гепард	The cheetah is a large cat native to Africa and central Iran. It is the fastest land animal, estimated to be capable of running at 80 to 128 km/h with the fastest reliably recorded speeds being 93 and 98 km/h, and as such has several adaptations for speed, including a light build, long thin legs and a long tail.	猎豹是一种原产于非洲和伊朗中部的大型猫科动物。它是最快的陆生动物，据估计能够以 80 到 128 公里/小时的速度奔跑，可靠记录的最快速度为 93 和 98 公里/小时，因此具有多种速度适应能力，包括轻体型、长而细的腿和长尾巴。	El guepardo es un gran felino originario de África y el centro de Irán. Es el animal terrestre más rápido, se estima que es capaz de correr de 80 a 128 km/h con las velocidades más rápidas registradas de manera confiable siendo 93 y 98 km/h, y como tal tiene varias adaptaciones para la velocidad, incluida una estructura liviana, largo delgado patas y cola larga.	الفهد هو قطة كبيرة موطنها أفريقيا ووسط إيران. إنه أسرع حيوان بري ، يقدر أنه قادر على الركض بسرعة 80 إلى 128 كم / ساعة مع أسرع سرعات مسجلة موثوقة تبلغ 93 و 98 كم / ساعة ، وعلى هذا النحو لديه العديد من التكيفات للسرعة ، بما في ذلك البناء الخفيف والنحيف الطويل سيقان وذيل طويل.	Le guépard est un grand félin originaire d'Afrique et du centre de l'Iran. C'est l'animal terrestre le plus rapide, estimé capable de courir de 80 à 128 km/h, les vitesses les plus rapides enregistrées de manière fiable étant de 93 et ​​98 km/h, et en tant que tel, il a plusieurs adaptations pour la vitesse, y compris une construction légère, longue et mince. pattes et une longue queue.	Гепард — крупная кошка, обитающая в Африке и центральном Иране. Это самое быстрое наземное животное, которое, по оценкам, способно бегать со скоростью от 80 до 128 км/ч, при этом самые высокие достоверно зарегистрированные скорости составляют 93 и 98 км/ч, и поэтому имеет несколько адаптаций к скорости, в том числе легкое телосложение, длинное худощавое телосложение. ноги и длинный хвост.	4
+\.
+
+
+--
+-- Name: article_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.article_id_seq', 6, true);
+
+
+--
+-- Name: article_media_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.article_media_id_seq', 16, true);
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 52, true);
+
+
+--
+-- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.category_id_seq', 12, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 13, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
+
+
+--
+-- Name: jumbotron_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jumbotron_id_seq', 7, true);
+
+
+--
+-- Name: opinion_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.opinion_attachment_id_seq', 12, true);
+
+
+--
+-- Name: opinion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.opinion_id_seq', 24, true);
+
+
+--
+-- Name: participant_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.participant_groups_id_seq', 1, false);
+
+
+--
+-- Name: participant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.participant_id_seq', 5, true);
+
+
+--
+-- Name: participant_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.participant_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: topic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.topic_id_seq', 16, true);
+
+
+--
+-- Name: article_media article_media_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article_media
+    ADD CONSTRAINT article_media_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article article_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: category category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: jumbotron jumbotron_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jumbotron
+    ADD CONSTRAINT jumbotron_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: opinion_attachment opinion_attachment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion_attachment
+    ADD CONSTRAINT opinion_attachment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: opinion opinion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion
+    ADD CONSTRAINT opinion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: participant_groups participant_groups_participant_id_group_id_05c7a474_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_groups
+    ADD CONSTRAINT participant_groups_participant_id_group_id_05c7a474_uniq UNIQUE (participant_id, group_id);
+
+
+--
+-- Name: participant_groups participant_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_groups
+    ADD CONSTRAINT participant_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: participant participant_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant
+    ADD CONSTRAINT participant_name_key UNIQUE (name);
+
+
+--
+-- Name: participant participant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant
+    ADD CONSTRAINT participant_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: participant_user_permissions participant_user_permiss_participant_id_permissio_54b9dce9_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_user_permissions
+    ADD CONSTRAINT participant_user_permiss_participant_id_permissio_54b9dce9_uniq UNIQUE (participant_id, permission_id);
+
+
+--
+-- Name: participant_user_permissions participant_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_user_permissions
+    ADD CONSTRAINT participant_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: participant participant_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant
+    ADD CONSTRAINT participant_username_key UNIQUE (username);
+
+
+--
+-- Name: topic topic_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.topic
+    ADD CONSTRAINT topic_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: article_category_id_99127861; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX article_category_id_99127861 ON public.article USING btree (category_id);
+
+
+--
+-- Name: article_topic_id_bd0e2449; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX article_topic_id_bd0e2449 ON public.article USING btree (topic_id);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: category_apex_id_f32a950e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX category_apex_id_f32a950e ON public.category USING btree (apex_id);
+
+
+--
+-- Name: category_slug_fd4fc841; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX category_slug_fd4fc841 ON public.category USING btree (slug);
+
+
+--
+-- Name: category_slug_fd4fc841_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX category_slug_fd4fc841_like ON public.category USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: jumbotron_category_id_af3f6e86; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX jumbotron_category_id_af3f6e86 ON public.jumbotron USING btree (category_id);
+
+
+--
+-- Name: jumbotron_topic_id_188ddaa5; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX jumbotron_topic_id_188ddaa5 ON public.jumbotron USING btree (topic_id);
+
+
+--
+-- Name: opinion_apex_id_bdcb7071; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_apex_id_bdcb7071 ON public.opinion USING btree (apex_id);
+
+
+--
+-- Name: opinion_attachment_md5_38c13b92; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_attachment_md5_38c13b92 ON public.opinion_attachment USING btree (md5);
+
+
+--
+-- Name: opinion_attachment_md5_38c13b92_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_attachment_md5_38c13b92_like ON public.opinion_attachment USING btree (md5 varchar_pattern_ops);
+
+
+--
+-- Name: opinion_attachment_opinion_id_853218db; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_attachment_opinion_id_853218db ON public.opinion_attachment USING btree (opinion_id);
+
+
+--
+-- Name: opinion_publisher_id_b6c16fe1; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_publisher_id_b6c16fe1 ON public.opinion USING btree (publisher_id);
+
+
+--
+-- Name: opinion_status_cc7ab1a2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_status_cc7ab1a2 ON public.opinion USING btree (status);
+
+
+--
+-- Name: opinion_topic_id_ea2b24b4; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX opinion_topic_id_ea2b24b4 ON public.opinion USING btree (topic_id);
+
+
+--
+-- Name: participant_groups_group_id_cb4374ae; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_groups_group_id_cb4374ae ON public.participant_groups USING btree (group_id);
+
+
+--
+-- Name: participant_groups_participant_id_68f15d1a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_groups_participant_id_68f15d1a ON public.participant_groups USING btree (participant_id);
+
+
+--
+-- Name: participant_name_214ff92e_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_name_214ff92e_like ON public.participant USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: participant_user_permissions_participant_id_d48880d2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_user_permissions_participant_id_d48880d2 ON public.participant_user_permissions USING btree (participant_id);
+
+
+--
+-- Name: participant_user_permissions_permission_id_0ff91910; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_user_permissions_permission_id_0ff91910 ON public.participant_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: participant_username_26ec1c9b_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX participant_username_26ec1c9b_like ON public.participant USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: topic_category_id_50eeb874; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX topic_category_id_50eeb874 ON public.topic USING btree (category_id);
+
+
+--
+-- Name: topic_slug_87383908; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX topic_slug_87383908 ON public.topic USING btree (slug);
+
+
+--
+-- Name: topic_slug_87383908_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX topic_slug_87383908_like ON public.topic USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: article article_category_id_99127861_fk_category_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_category_id_99127861_fk_category_id FOREIGN KEY (category_id) REFERENCES public.category(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: article article_topic_id_bd0e2449_fk_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.article
+    ADD CONSTRAINT article_topic_id_bd0e2449_fk_topic_id FOREIGN KEY (topic_id) REFERENCES public.topic(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: category category_apex_id_f32a950e_fk_category_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_apex_id_f32a950e_fk_category_id FOREIGN KEY (apex_id) REFERENCES public.category(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_participant_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_participant_id FOREIGN KEY (user_id) REFERENCES public.participant(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jumbotron jumbotron_category_id_af3f6e86_fk_category_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jumbotron
+    ADD CONSTRAINT jumbotron_category_id_af3f6e86_fk_category_id FOREIGN KEY (category_id) REFERENCES public.category(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jumbotron jumbotron_topic_id_188ddaa5_fk_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jumbotron
+    ADD CONSTRAINT jumbotron_topic_id_188ddaa5_fk_topic_id FOREIGN KEY (topic_id) REFERENCES public.topic(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: opinion opinion_apex_id_bdcb7071_fk_opinion_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion
+    ADD CONSTRAINT opinion_apex_id_bdcb7071_fk_opinion_id FOREIGN KEY (apex_id) REFERENCES public.opinion(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: opinion_attachment opinion_attachment_opinion_id_853218db_fk_opinion_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion_attachment
+    ADD CONSTRAINT opinion_attachment_opinion_id_853218db_fk_opinion_id FOREIGN KEY (opinion_id) REFERENCES public.opinion(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: opinion opinion_publisher_id_b6c16fe1_fk_participant_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion
+    ADD CONSTRAINT opinion_publisher_id_b6c16fe1_fk_participant_id FOREIGN KEY (publisher_id) REFERENCES public.participant(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: opinion opinion_topic_id_ea2b24b4_fk_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opinion
+    ADD CONSTRAINT opinion_topic_id_ea2b24b4_fk_topic_id FOREIGN KEY (topic_id) REFERENCES public.topic(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: participant_groups participant_groups_group_id_cb4374ae_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_groups
+    ADD CONSTRAINT participant_groups_group_id_cb4374ae_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: participant_groups participant_groups_participant_id_68f15d1a_fk_participant_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_groups
+    ADD CONSTRAINT participant_groups_participant_id_68f15d1a_fk_participant_id FOREIGN KEY (participant_id) REFERENCES public.participant(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: participant_user_permissions participant_user_per_participant_id_d48880d2_fk_participa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_user_permissions
+    ADD CONSTRAINT participant_user_per_participant_id_d48880d2_fk_participa FOREIGN KEY (participant_id) REFERENCES public.participant(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: participant_user_permissions participant_user_per_permission_id_0ff91910_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.participant_user_permissions
+    ADD CONSTRAINT participant_user_per_permission_id_0ff91910_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: topic topic_category_id_50eeb874_fk_category_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.topic
+    ADD CONSTRAINT topic_category_id_50eeb874_fk_category_id FOREIGN KEY (category_id) REFERENCES public.category(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
